@@ -77,6 +77,7 @@ export class WorkshopSettings extends SettingTrigger {
 		}
 
 		UpgradeSettings.validateGame(game, settings.unlockUpgrades);
+		ZebraUpgradeSettings.validateGame(game, settings.unlockZebraUpgrades);
 	}
 
 	load(settings: Maybe<Partial<WorkshopSettings>>) {

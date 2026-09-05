@@ -129,13 +129,15 @@ export class ZebraUpgradeSettings extends SettingTrigger {
 		for (const _ of missingInSettings) {
 			console.warn(
 				...cl(
-					`The workshop upgrade '${_}' is not tracked in Kitten Scientists!`,
+					`The Zebra workshop upgrade '${_}' is not tracked in Kitten Scientists!`,
 				),
 			);
 		}
 		for (const _ of redundantInSettings) {
 			console.warn(
-				...cl(`The workshop upgrade '${_}' is not an upgrade in Kittens Game!`),
+				...cl(
+					`The Zebra workshop upgrade '${_}' is not an upgrade in Kittens Game!`,
+				),
 			);
 		}
 	}

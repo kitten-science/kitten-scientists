@@ -1,11 +1,11 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.5.10/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.5.11/schema.json",
 	"assist": {
 		"actions": {
-			"recommended": true,
+			"preset": "recommended",
 			"source": {
 				"organizeImports": "on",
-				"recommended": true,
+				"preset": "recommended",
 				"useSortedKeys": "off"
 			}
 		},

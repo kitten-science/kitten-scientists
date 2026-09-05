@@ -1146,7 +1146,10 @@ export const ZebraUpgrades = [
 	"darkBrew",
 	"darkRevolution",
 	"minerologyDepartment",
+	"rangefinders",
+	"reforgedOutposts",
 	"whispers",
+	"zebraTrappers",
 ] as const;
 export type ZebraUpgrade = (typeof ZebraUpgrades)[number];
 
