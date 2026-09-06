@@ -780,6 +780,13 @@ export class ReligionManager implements Automation {
 				return;
 			}
 
+			// Because we sacrifice unicorns internally, it's possible that the button
+			// model is not enabled (meaning the refine button is disabled). The button
+			// is usually updated when the Religion tab is focused. So this should never
+			// happen when playing the game regularly. We manually set the model to
+			// enabled here to ensure that we can refine. We have already checked that
+			// we can afford the process.
+			model.enabled = true;
 			controller.buyItem(model, new Event("decoy"), availableForConversion);
 
 			const availableNow = this._workshopManager.getValueAvailable("tears");
