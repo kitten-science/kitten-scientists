@@ -44,13 +44,16 @@ export class TriggerButton extends Button {
 					this.updateLabel(triggerValue);
 				}
 
+				// Let the owner recompute `inactive` (and the tooltip) *before* the
+				// styling is applied. Applying it first would leave the button
+				// looking inactive until the next refresh.
+				options?.onRefresh?.call(this);
+
 				if (!this.inactive) {
 					this.element.removeClass(stylesButton.inactive);
 				} else {
 					this.element.addClass(stylesButton.inactive);
 				}
-
-				options?.onRefresh?.call(this);
 			},
 		});
 

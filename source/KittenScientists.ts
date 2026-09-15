@@ -234,6 +234,14 @@ export class KittenScientists {
 			numericValue = -1;
 		}
 
+		// `parseInt`/`parseFloat` yield `NaN` for input that isn't a number at all.
+		// Report that the same way as an empty value, so callers which fall back to
+		// their previous value with `??` (all `parseAbsolute` call sites) don't end
+		// up storing `NaN`.
+		if (!Number.isFinite(numericValue)) {
+			return null;
+		}
+
 		return numericValue;
 	}
 
