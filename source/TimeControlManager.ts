@@ -50,6 +50,11 @@ export class TimeControlManager {
 		if (this.settings.timeSkip.enabled) {
 			this.timeSkip();
 		}
+		// Replenishing temporal flux is an action of its own, so it runs even when
+		// regular time skipping is switched off.
+		if (this.settings.timeSkip.acquireTemporalFlux.enabled) {
+			this.acquireTemporalFlux();
+		}
 		if (this.settings.reset.enabled) {
 			await this.autoReset(this._host.engine);
 		}
@@ -552,6 +557,113 @@ export class TimeControlManager {
 			this._host.engine.iactivity("time.skip", "act.time.skip", [willSkip]);
 			this._host.engine.storeForSummary("time.skip", willSkip);
 		}
+	}
+
+	/**
+	 * Burn time crystals in order to replenish temporal flux.
+	 *
+	 * This is deliberately independent of the regular time skip: it ignores the
+	 * configured maximum amount of years, the season/cycle selection and the
+	 * overheat handling, because its purpose is to *obtain* temporal flux, not to
+	 * skip time on the player's terms. Only what the shatter itself consumes
+	 * (time crystals, void) limits it.
+	 */
+	acquireTemporalFlux() {
+		// Shattering requires the Chronoforge.
+		if (!this._host.game.workshop.get("chronoforge").researched) {
+			return;
+		}
+
+		// Don't shatter while we're in a temporal paradox.
+		if (this._host.game.calendar.day < 0) {
+			return;
+		}
+
+		const yearsWanted = this.getTemporalFluxSkips();
+		if (yearsWanted <= 0) {
+			return;
+		}
+
+		const shatterCostIncreaseChallenge = this._host.game.getEffect(
+			"shatterCostIncreaseChallenge",
+		);
+		const crystalSkips =
+			this._workshopManager.getValueAvailable("timeCrystal") /
+			(1 + shatterCostIncreaseChallenge);
+		const shatterVoidCost = this._host.game.getEffect("shatterVoidCost");
+		const voidSkips =
+			0 < shatterVoidCost
+				? this._workshopManager.getValueAvailable("void") / shatterVoidCost
+				: Number.POSITIVE_INFINITY;
+
+		const yearsToSkip = Math.floor(
+			Math.min(yearsWanted, crystalSkips, voidSkips),
+		);
+		if (yearsToSkip <= 0) {
+			return;
+		}
+
+		const controller = new classes.ui.time.ShatterTCBtnController(
+			this._host.game,
+		) as ShatterTCBtnController;
+		const model = controller.fetchModel({});
+		controller.doShatterAmt(model, yearsToSkip);
+
+		this._host.engine.iactivity("time.skip", "act.time.skip", [yearsToSkip]);
+		this._host.engine.storeForSummary("time.skip", yearsToSkip);
+		this._host.engine.iactivity(
+			"time.acquireTemporalFlux",
+			"act.time.acquireTemporalFlux",
+			[],
+		);
+		this._host.engine.storeForSummary("time.acquireTemporalFlux", 1);
+	}
+
+	/**
+	 * Determine how many years we would like to skip in order to replenish
+	 * temporal flux.
+	 *
+	 * Burning a time crystal skips a year and, once the `turnSmoothly` workshop
+	 * upgrade (which makes chronospheres produce temporal flux) has been
+	 * researched, every year that passes yields `temporalFluxProduction`
+	 * temporal flux. So skipping years is the only way to actively obtain
+	 * temporal flux. Without that upgrade, burning crystals doesn't produce any
+	 * flux at all, in which case we don't burn any.
+	 *
+	 * @returns The amount of additional years to skip, or 0 if no flux is needed.
+	 */
+	getTemporalFluxSkips() {
+		const setting = this.settings.timeSkip.acquireTemporalFlux;
+		if (!setting.enabled) {
+			return 0;
+		}
+
+		// Chronospheres only produce temporal flux after the "turnSmoothly"
+		// workshop upgrade has been researched.
+		if (!this._host.game.workshop.get("turnSmoothly").researched) {
+			return 0;
+		}
+
+		const temporalFlux = this._host.game.resPool.get("temporalFlux");
+		const targetFlux = temporalFlux.maxValue * setting.trigger;
+
+		// Nothing to do, if we're already above the configured level.
+		if (temporalFlux.maxValue <= 0 || targetFlux <= temporalFlux.value) {
+			return 0;
+		}
+
+		const temporalFluxProduction = this._host.game.getEffect(
+			"temporalFluxProduction",
+		);
+		if (temporalFluxProduction <= 0) {
+			return 0;
+		}
+
+		// Every skipped year produces `temporalFluxProduction` temporal flux.
+		return Math.max(
+			1,
+			Math.ceil((targetFlux - temporalFlux.value) / temporalFluxProduction),
+		);
 	}
 
 	getBuild(

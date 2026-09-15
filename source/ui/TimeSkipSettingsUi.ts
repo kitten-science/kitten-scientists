@@ -17,6 +17,7 @@ import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
 import { TimeSkipHeatSettingsUi } from "./TimeSkipHeatSettingsUi.js";
 
@@ -27,6 +28,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<
 	private readonly _cycles: CollapsiblePanel;
 	private readonly _seasons: CollapsiblePanel;
 	private readonly _activeHeatTransferUI: TimeSkipHeatSettingsUi;
+	private readonly _acquireTemporalFlux: SettingTriggerListItem;
 
 	constructor(
 		parent: UiComponent,
@@ -183,6 +185,75 @@ export class TimeSkipSettingsUi extends SettingsPanel<
 			settings,
 			sectionSetting,
 		);
+		this._acquireTemporalFlux = new SettingTriggerListItem(
+			this,
+			this.setting.acquireTemporalFlux,
+			locale,
+			this.host.engine.i18n("option.time.skip.acquireTemporalFlux"),
+			{
+				onCheck: (_isBatchProcess?: boolean) => {
+					this.host.engine.imessage("status.sub.enable", [
+						this.host.engine.i18n("option.time.skip.acquireTemporalFlux"),
+					]);
+				},
+				onRefreshTrigger() {
+					this.triggerButton.inactive = !this.setting.enabled;
+					this.triggerButton.ineffective =
+						sectionSetting.enabled &&
+						settings.enabled &&
+						this.setting.enabled &&
+						this.setting.trigger <= 0;
+					this.triggerButton.element[0].title = this.host.engine.i18n(
+						"ui.trigger.acquireTemporalFlux.title",
+						[
+							this.host.renderPercentage(
+								this.setting.trigger,
+								locale.selected,
+								true,
+							),
+						],
+					);
+				},
+				onSetTrigger: async () => {
+					const value = await Dialog.prompt(
+						this,
+						this.host.engine.i18n("ui.trigger.prompt.percentage"),
+						this.host.engine.i18n(
+							"ui.trigger.acquireTemporalFlux.promptTitle",
+							[
+								this.host.renderPercentage(
+									settings.acquireTemporalFlux.trigger,
+									locale.selected,
+									true,
+								),
+							],
+						),
+						this.host.renderPercentage(settings.acquireTemporalFlux.trigger),
+						this.host.engine.i18n(
+							"ui.trigger.acquireTemporalFlux.promptExplainer",
+						),
+					);
+
+					if (value === undefined || value === "" || value.startsWith("-")) {
+						return;
+					}
+
+					// Input that isn't a number at all is treated like hitting cancel,
+					// as the explainer of this prompt promises.
+					const trigger = this.host.parsePercentage(value);
+					if (!Number.isFinite(trigger)) {
+						return;
+					}
+
+					settings.acquireTemporalFlux.trigger = trigger;
+				},
+				onUnCheck: (_isBatchProcess?: boolean) => {
+					this.host.engine.imessage("status.sub.disable", [
+						this.host.engine.i18n("option.time.skip.acquireTemporalFlux"),
+					]);
+				},
+			},
+		);
 
 		this.addChildContent(
 			new SettingsList(this, {
@@ -196,6 +267,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<
 					this.setting.ignoreOverheat,
 					this.host.engine.i18n("option.time.skip.ignoreOverheat"),
 				),
+				this._acquireTemporalFlux,
 				this._activeHeatTransferUI,
 			]),
 		);
