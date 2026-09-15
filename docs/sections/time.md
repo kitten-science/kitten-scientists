@@ -20,7 +20,11 @@ When you enable a building, this building will be built if all of these are true
 
 ### Fix Cryochamber
 
-If you have broken cryochambers, they will be fixed automatically.
+If you have broken cryochambers, they will be fixed automatically. Every repair costs temporal flux, so the **Trigger** of this option is the amount of temporal flux that has to _remain_ after each single repair. A value of `0` means that repairs are not limited.
+
+#### Only while Flux is Produced
+
+Restricts repairs to situations where temporal flux is actually being produced. This requires the **Chronosurge** workshop upgrade and at least one **Chronosphere**. Without a source of temporal flux, repairs would only drain the flux that other features rely on. This sub-option is off by default.
 
 ### Turn on Chrono Furnaces
 

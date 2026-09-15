@@ -24,6 +24,24 @@ import type {
 } from "./types/time.js";
 import type { WorkshopManager } from "./WorkshopManager.js";
 
+/**
+ * Is temporal flux currently being produced?
+ *
+ * Chronospheres only produce temporal flux after the `turnSmoothly` workshop
+ * upgrade has been researched. Without that upgrade, or without at least one
+ * chronosphere, the production rate is 0.
+ *
+ * This mirrors the condition `TimeControlManager.getTemporalFluxSkips()` uses
+ * to decide whether burning time crystals actually yields temporal flux.
+ */
+export function isTemporalFluxProduced(host: KittenScientists) {
+	if (!host.game.workshop.get("turnSmoothly").researched) {
+		return false;
+	}
+
+	return 0 < host.game.getEffect("temporalFluxProduction");
+}
+
 export class TimeManager {
 	private readonly _host: KittenScientists;
 	readonly settings: TimeSettings;
@@ -185,6 +203,15 @@ export class TimeManager {
 	}
 
 	fixCryochambers() {
+		// Optionally require an active source of temporal flux before repairing:
+		// without one, every repair would drain flux that never comes back.
+		if (
+			this.settings.fixCryochambers.onlyWithFluxProduction.enabled &&
+			!isTemporalFluxProduced(this._host)
+		) {
+			return;
+		}
+
 		if (this._host.game.time.getVSU("usedCryochambers").val < 1) {
 			return;
 		}
@@ -192,12 +219,30 @@ export class TimeManager {
 		const prices = mustExist(
 			this._host.game.time.getVSU("usedCryochambers").fixPrices,
 		);
-		for (const price of prices) {
-			const available = this._workshopManager.getValueAvailable(price.name);
-			if (available < price.val) {
-				return;
-			}
-		}
+
+		// Repairing a cryochamber costs temporal flux. The configured lower limit is
+		// the amount of temporal flux that has to *remain* after a repair, so that
+		// repairs never drain the flux that other features (like time acceleration)
+		// rely on. A value of 0 (or less) means "don't limit repairs at all".
+		//
+		// This has to be re-evaluated for every single repair: checking it only once
+		// before the loop would allow a run of repairs to spend far below the limit.
+		const minimumTemporalFlux = this.settings.fixCryochambers.trigger;
+		const temporalFluxPrice = prices
+			.filter((price) => "temporalFlux" === price.name)
+			.reduce((total, price) => total + price.val, 0);
+
+		const staysAboveLimit = () =>
+			minimumTemporalFlux <= 0 ||
+			minimumTemporalFlux <=
+				this._workshopManager.getValueAvailable("temporalFlux") -
+					temporalFluxPrice;
+
+		const canAfford = () =>
+			prices.every(
+				(price) =>
+					price.val <= this._workshopManager.getValueAvailable(price.name),
+			);
 
 		const controller = new classes.ui.time.FixCryochamberBtnController(
 			this._host.game,
@@ -205,13 +250,14 @@ export class TimeManager {
 		const model = controller.fetchModel({});
 
 		let fixed = 0;
-		let fixHappened: boolean;
-		do {
-			fixHappened = false;
+		while (staysAboveLimit() && canAfford()) {
 			const buyResult = controller.buyItem(model);
-			fixHappened = buyResult.itemBought;
-			fixed += fixHappened ? 1 : 0;
-		} while (fixHappened);
+			if (!buyResult.itemBought) {
+				break;
+			}
+
+			fixed += 1;
+		}
 
 		if (0 < fixed) {
 			this._host.engine.iactivity(
