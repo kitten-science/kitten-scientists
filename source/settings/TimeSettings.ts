@@ -7,7 +7,12 @@ import {
 	type VoidSpaceUpgrade,
 	VoidSpaceUpgrades,
 } from "../types/index.js";
-import { Setting, SettingTrigger, SettingTriggerMax } from "./Settings.js";
+import {
+	Setting,
+	SettingThreshold,
+	SettingTrigger,
+	SettingTriggerMax,
+} from "./Settings.js";
 
 /**
  * The upgrades on the Time tab that we have options for.
@@ -37,12 +42,56 @@ export class TimeSettingsItem extends SettingTriggerMax {
 
 export type TimeBuildingsSettings = Record<TimeItem, TimeSettingsItem>;
 
+/**
+ * Settings for the automatic repair of used cryochambers.
+ *
+ * Repairing a cryochamber costs temporal flux. The trigger of this setting is
+ * the lower limit of temporal flux that has to remain after each repair. A
+ * value of 0 (or less) disables the limit.
+ */
+export class FixCryochambersSettings extends SettingThreshold {
+	/**
+	 * Only repair cryochambers while temporal flux is actually being produced.
+	 *
+	 * Temporal flux is produced by chronospheres, and only after the
+	 * `turnSmoothly` workshop upgrade has been researched. Without a source of
+	 * temporal flux, repairs would permanently drain the flux that other
+	 * features (like time acceleration) rely on.
+	 */
+	onlyWithFluxProduction: Setting;
+
+	constructor(
+		enabled = false,
+		threshold = 0,
+		onlyWithFluxProduction = new Setting(false),
+	) {
+		super(enabled, threshold);
+		this.onlyWithFluxProduction = onlyWithFluxProduction;
+	}
+
+	load(settings: Maybe<Partial<FixCryochambersSettings>>) {
+		if (isNil(settings)) {
+			return;
+		}
+
+		super.load(settings);
+		this.onlyWithFluxProduction.load(settings.onlyWithFluxProduction);
+	}
+}
+
 export class TimeSettings extends SettingTrigger {
 	buildings: TimeBuildingsSettings;
 
-	fixCryochambers: Setting;
+	/**
+	 * Fix used cryochambers.
+	 */
+	fixCryochambers: FixCryochambersSettings;
 
-	constructor(enabled = false, trigger = -1, fixCryochambers = new Setting()) {
+	constructor(
+		enabled = false,
+		trigger = -1,
+		fixCryochambers = new FixCryochambersSettings(false, 0),
+	) {
 		super(enabled, trigger);
 		this.buildings = this.initBuildings();
 		this.fixCryochambers = fixCryochambers;
