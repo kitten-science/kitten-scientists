@@ -7,6 +7,7 @@ import { ScienceSettings } from "./settings/ScienceSettings.js";
 import { SpaceSettings } from "./settings/SpaceSettings.js";
 import { WorkshopSettings } from "./settings/WorkshopSettings.js";
 import { cl } from "./tools/Log.js";
+import { parseAbsoluteEntry, parsePercentageEntry } from "./tools/Numbers.js";
 import type { GamePage } from "./types/game.js";
 import type { I18nEngine, Locale } from "./types/index.js";
 import { UserScriptLoader } from "./UserScriptLoader.js";
@@ -209,7 +210,13 @@ export class KittenScientists {
 	}
 
 	/**
-	 * Turns a string like 52.7 into the number 52.7
+	 * Turns a string like 52.7 into the number 52.7.
+	 *
+	 * Accepted are plain numbers, numbers with decimals, scientific notation
+	 * (like `1e42`) and the postfixes the game uses for display (like `1.5K`).
+	 * Infinity is represented as -1, which is also what any negative input is
+	 * mapped to.
+	 *
 	 * @param value - String representation of an absolute value.
 	 * @returns A number between 0 and Infinity, where Infinity is represented as -1.
 	 */
@@ -218,31 +225,25 @@ export class KittenScientists {
 			return null;
 		}
 
-		const hasSuffix = /[KMGTP]$/i.test(value);
-		const baseValue = value.substring(0, value.length - (hasSuffix ? 1 : 0));
-
-		let numericValue =
-			value.includes("e") || hasSuffix
-				? Number.parseFloat(baseValue)
-				: Number.parseInt(baseValue, 10);
-		if (hasSuffix) {
-			const suffix = value.substring(value.length - 1).toUpperCase();
-			numericValue =
-				numericValue * 1000 ** ["", "K", "M", "G", "T", "P"].indexOf(suffix);
-		}
-		if (numericValue === Number.POSITIVE_INFINITY || numericValue < 0) {
-			numericValue = -1;
+		// Feedback for the user that requests "no limit".
+		if (value.trim() === "∞") {
+			return -1;
 		}
 
-		// `parseInt`/`parseFloat` yield `NaN` for input that isn't a number at all.
-		// Report that the same way as an empty value, so callers which fall back to
-		// their previous value with `??` (all `parseAbsolute` call sites) don't end
-		// up storing `NaN`.
-		if (!Number.isFinite(numericValue)) {
+		// Anything that isn't a number at all is reported the same way as an empty
+		// value, so callers which fall back to their previous value with `??`
+		// (all `parseAbsolute` call sites) don't end up storing `NaN`.
+		const entry = parseAbsoluteEntry(value);
+		if (entry === null) {
 			return null;
 		}
 
-		return numericValue;
+		// A negative value expresses "no limit" here, just like it always has.
+		if (value.trim().startsWith("-")) {
+			return -1;
+		}
+
+		return entry.value;
 	}
 
 	parseAbsolute(value: string | null): number | null {
@@ -252,12 +253,24 @@ export class KittenScientists {
 
 	/**
 	 * Turns a string like 52.7 into the number 0.527
+	 *
+	 * The same syntax as `parseFloat` is accepted, where the trailing percentage
+	 * sign is optional. A value that exceeds 100% is clamped to 100%.
+	 *
 	 * @param value - String representation of a percentage.
 	 * @returns A number between 0 and 1 representing the described percentage.
 	 */
 	parsePercentage(value: string): number {
-		const cleanedValue = value.trim().replace(/%$/, "");
-		return Math.max(0, Math.min(1, Number.parseFloat(cleanedValue) / 100));
+		const entry = parsePercentageEntry(value);
+		if (entry === null) {
+			return Number.NaN;
+		}
+
+		// A value that was entered as an absolute value still describes the same
+		// scale from 0 to 100, which is how these fields have always worked.
+		const percentage =
+			entry.kind === "percentage" ? entry.value : entry.value / 100;
+		return Math.max(0, Math.min(1, percentage));
 	}
 
 	/**

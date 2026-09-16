@@ -1,10 +1,16 @@
 import { isNil } from "@oliversalzburg/js-utils/data/nil.js";
 import type { SupportedLocale } from "../Engine.js";
 import type { SettingOptions } from "../settings/Settings.js";
-import type { TimeItem, TimeSettings } from "../settings/TimeSettings.js";
+import type {
+	FixCryochambersSettings,
+	TimeItem,
+	TimeSettings,
+} from "../settings/TimeSettings.js";
 import { isTemporalFluxProduced } from "../TimeManager.js";
 import { objectEntries } from "../tools/Entries.js";
 import { cl } from "../tools/Log.js";
+import { parsePercentageEntry } from "../tools/Numbers.js";
+import { renderTrigger } from "../tools/TriggerValue.js";
 import { BuildSectionTools } from "./BuildSectionTools.js";
 import { CollapsiblePanel } from "./components/CollapsiblePanel.js";
 import { Dialog } from "./components/Dialog.js";
@@ -121,7 +127,7 @@ export class TimeSettingsUi extends SettingsPanel<
 
 		this._fixCryochambers = new CollapsiblePanel(
 			this,
-			new SettingTriggerListItem(
+			new SettingTriggerListItem<FixCryochambersSettings>(
 				this,
 				this.setting.fixCryochambers,
 				locale,
@@ -133,31 +139,42 @@ export class TimeSettingsUi extends SettingsPanel<
 						]);
 					},
 					onRefreshTrigger() {
+						const { fixCryochambers } = settings;
 						this.triggerButton.inactive =
-							!this.setting.enabled || this.setting.trigger <= 0;
+							!this.setting.enabled || fixCryochambers.trigger <= 0;
 						this.triggerButton.element[0].title = this.host.engine.i18n(
 							"ui.trigger.fixCryochambers.title",
 							[
-								this.setting.trigger <= 0
+								fixCryochambers.trigger <= 0
 									? this.host.engine.i18n("ui.trigger.inactive")
-									: this.host.renderAbsolute(
-											this.setting.trigger,
+									: renderTrigger(
+											this.host,
+											fixCryochambers.trigger,
+											fixCryochambers.isPercentage,
 											locale.selected,
 										),
 							],
 						);
 					},
 					onSetTrigger: async () => {
+						const { fixCryochambers } = settings;
 						const value = await Dialog.prompt(
 							this,
-							this.host.engine.i18n("ui.trigger.prompt.float"),
+							this.host.engine.i18n("ui.trigger.fixCryochambers.prompt"),
 							this.host.engine.i18n("ui.trigger.fixCryochambers.promptTitle", [
-								this.host.renderAbsolute(
-									this.setting.fixCryochambers.trigger,
+								renderTrigger(
+									this.host,
+									fixCryochambers.trigger,
+									fixCryochambers.isPercentage,
 									locale.selected,
 								),
 							]),
-							this.host.renderAbsolute(this.setting.fixCryochambers.trigger),
+							renderTrigger(
+								this.host,
+								fixCryochambers.trigger,
+								fixCryochambers.isPercentage,
+								"invariant",
+							),
 							this.host.engine.i18n(
 								"ui.trigger.fixCryochambers.promptExplainer",
 							),
@@ -168,14 +185,25 @@ export class TimeSettingsUi extends SettingsPanel<
 						}
 
 						// An empty or negative value disables the limit.
-						if (value === "" || value.startsWith("-")) {
-							this.setting.fixCryochambers.trigger = 0;
+						if (value === "" || value.trim().startsWith("-")) {
+							fixCryochambers.trigger = 0;
 							return;
 						}
 
-						this.setting.fixCryochambers.trigger =
-							this.host.parseAbsolute(value) ??
-							this.setting.fixCryochambers.trigger;
+						// A trailing percentage sign switches this limit to a share of
+						// the maximum temporal flux storage, an absolute value switches
+						// it back. Values that aren't a number at all are treated as if
+						// the user hit cancel.
+						const entry = parsePercentageEntry(value);
+						if (entry === null) {
+							return;
+						}
+
+						fixCryochambers.isPercentage = entry.kind === "percentage";
+						fixCryochambers.trigger =
+							entry.kind === "percentage"
+								? entry.value
+								: Math.round(entry.value);
 					},
 					onUnCheck: () => {
 						this.host.engine.imessage("status.sub.disable", [

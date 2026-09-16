@@ -9,6 +9,7 @@ import {
 } from "./settings/TimeControlSettings.js";
 import { objectEntries } from "./tools/Entries.js";
 import { negativeOneToInfinity } from "./tools/Format.js";
+import { resolveLimit } from "./tools/TriggerValue.js";
 import type { BuildingMeta, UnsafeBuilding } from "./types/buildings.js";
 import {
 	type ChronoForgeUpgrade,
@@ -645,7 +646,11 @@ export class TimeControlManager {
 		}
 
 		const temporalFlux = this._host.game.resPool.get("temporalFlux");
-		const targetFlux = temporalFlux.maxValue * setting.trigger;
+		const targetFlux = resolveLimit(
+			setting.trigger,
+			setting.isPercentage,
+			temporalFlux.maxValue,
+		);
 
 		// Nothing to do, if we're already above the configured level.
 		if (temporalFlux.maxValue <= 0 || targetFlux <= temporalFlux.value) {

@@ -2,8 +2,13 @@ import type { SupportedLocale } from "../Engine.js";
 import { Icons } from "../images/Icons.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { TimeControlSettings } from "../settings/TimeControlSettings.js";
-import type { TimeSkipSettings } from "../settings/TimeSkipSettings.js";
+import type {
+	AcquireTemporalFluxSettings,
+	TimeSkipSettings,
+} from "../settings/TimeSkipSettings.js";
 import { ucfirst } from "../tools/Format.js";
+import { parsePercentageEntry } from "../tools/Numbers.js";
+import { renderTrigger } from "../tools/TriggerValue.js";
 import stylesButton from "./components/Button.module.css";
 import { CollapsiblePanel } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container.js";
@@ -28,7 +33,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<
 	private readonly _cycles: CollapsiblePanel;
 	private readonly _seasons: CollapsiblePanel;
 	private readonly _activeHeatTransferUI: TimeSkipHeatSettingsUi;
-	private readonly _acquireTemporalFlux: SettingTriggerListItem;
+	private readonly _acquireTemporalFlux: SettingTriggerListItem<AcquireTemporalFluxSettings>;
 
 	constructor(
 		parent: UiComponent,
@@ -185,75 +190,91 @@ export class TimeSkipSettingsUi extends SettingsPanel<
 			settings,
 			sectionSetting,
 		);
-		this._acquireTemporalFlux = new SettingTriggerListItem(
-			this,
-			this.setting.acquireTemporalFlux,
-			locale,
-			this.host.engine.i18n("option.time.skip.acquireTemporalFlux"),
-			{
-				onCheck: (_isBatchProcess?: boolean) => {
-					this.host.engine.imessage("status.sub.enable", [
-						this.host.engine.i18n("option.time.skip.acquireTemporalFlux"),
-					]);
-				},
-				onRefreshTrigger() {
-					this.triggerButton.inactive = !this.setting.enabled;
-					this.triggerButton.ineffective =
-						sectionSetting.enabled &&
-						settings.enabled &&
-						this.setting.enabled &&
-						this.setting.trigger <= 0;
-					this.triggerButton.element[0].title = this.host.engine.i18n(
-						"ui.trigger.acquireTemporalFlux.title",
-						[
-							this.host.renderPercentage(
-								this.setting.trigger,
-								locale.selected,
-								true,
-							),
-						],
-					);
-				},
-				onSetTrigger: async () => {
-					const value = await Dialog.prompt(
-						this,
-						this.host.engine.i18n("ui.trigger.prompt.percentage"),
-						this.host.engine.i18n(
-							"ui.trigger.acquireTemporalFlux.promptTitle",
+		// The callbacks below lose the narrowed type of `this.setting`, because it
+		// is declared on the generic base class.
+		const panelSettings = this.setting;
+		this._acquireTemporalFlux =
+			new SettingTriggerListItem<AcquireTemporalFluxSettings>(
+				this,
+				panelSettings.acquireTemporalFlux,
+				locale,
+				this.host.engine.i18n("option.time.skip.acquireTemporalFlux"),
+				{
+					onCheck: (_isBatchProcess?: boolean) => {
+						this.host.engine.imessage("status.sub.enable", [
+							this.host.engine.i18n("option.time.skip.acquireTemporalFlux"),
+						]);
+					},
+					onRefreshTrigger() {
+						const { acquireTemporalFlux } = panelSettings;
+						this.triggerButton.inactive = !this.setting.enabled;
+						this.triggerButton.ineffective =
+							sectionSetting.enabled &&
+							settings.enabled &&
+							this.setting.enabled &&
+							acquireTemporalFlux.trigger <= 0;
+						this.triggerButton.element[0].title = this.host.engine.i18n(
+							"ui.trigger.acquireTemporalFlux.title",
 							[
-								this.host.renderPercentage(
-									settings.acquireTemporalFlux.trigger,
+								renderTrigger(
+									this.host,
+									acquireTemporalFlux.trigger,
+									acquireTemporalFlux.isPercentage,
 									locale.selected,
-									true,
 								),
 							],
-						),
-						this.host.renderPercentage(settings.acquireTemporalFlux.trigger),
-						this.host.engine.i18n(
-							"ui.trigger.acquireTemporalFlux.promptExplainer",
-						),
-					);
+						);
+					},
+					onSetTrigger: async () => {
+						const { acquireTemporalFlux } = panelSettings;
+						const value = await Dialog.prompt(
+							this,
+							this.host.engine.i18n("ui.trigger.acquireTemporalFlux.prompt"),
+							this.host.engine.i18n(
+								"ui.trigger.acquireTemporalFlux.promptTitle",
+								[
+									renderTrigger(
+										this.host,
+										acquireTemporalFlux.trigger,
+										acquireTemporalFlux.isPercentage,
+										locale.selected,
+									),
+								],
+							),
+							renderTrigger(
+								this.host,
+								acquireTemporalFlux.trigger,
+								acquireTemporalFlux.isPercentage,
+								"invariant",
+							),
+							this.host.engine.i18n(
+								"ui.trigger.acquireTemporalFlux.promptExplainer",
+							),
+						);
 
-					if (value === undefined || value === "" || value.startsWith("-")) {
-						return;
-					}
+						if (value === undefined || value === "") {
+							return;
+						}
 
-					// Input that isn't a number at all is treated like hitting cancel,
-					// as the explainer of this prompt promises.
-					const trigger = this.host.parsePercentage(value);
-					if (!Number.isFinite(trigger)) {
-						return;
-					}
+						// A trailing percentage sign switches this trigger to a share of
+						// the maximum temporal flux storage, an absolute value switches it
+						// back. Input that isn't a number at all is treated like hitting
+						// cancel, as the explainer of this prompt promises.
+						const entry = parsePercentageEntry(value);
+						if (entry === null) {
+							return;
+						}
 
-					settings.acquireTemporalFlux.trigger = trigger;
+						acquireTemporalFlux.isPercentage = entry.kind === "percentage";
+						acquireTemporalFlux.trigger = entry.value;
+					},
+					onUnCheck: (_isBatchProcess?: boolean) => {
+						this.host.engine.imessage("status.sub.disable", [
+							this.host.engine.i18n("option.time.skip.acquireTemporalFlux"),
+						]);
+					},
 				},
-				onUnCheck: (_isBatchProcess?: boolean) => {
-					this.host.engine.imessage("status.sub.disable", [
-						this.host.engine.i18n("option.time.skip.acquireTemporalFlux"),
-					]);
-				},
-			},
-		);
+			);
 
 		this.addChildContent(
 			new SettingsList(this, {

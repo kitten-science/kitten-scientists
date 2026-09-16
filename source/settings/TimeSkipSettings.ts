@@ -7,6 +7,51 @@ import { Setting, SettingThresholdMax, SettingTrigger } from "./Settings.js";
 export type CyclesSettings = Record<Cycle, Setting>;
 export type SeasonsSettings = Record<Season, Setting>;
 
+/**
+ * Settings for automatically burning time crystals to replenish temporal flux.
+ *
+ * The trigger is the level of temporal flux below which additional years are
+ * skipped to refill it. It can be given either as a share of the maximum
+ * temporal flux storage, in which case it is kept as a value between 0 and 1,
+ * or as an absolute amount.
+ */
+export class AcquireTemporalFluxSettings extends SettingTrigger {
+	/**
+	 * Was the trigger entered as a share of the maximum temporal flux storage?
+	 *
+	 * Unset for saves that predate the option, in which case the trigger is a
+	 * share, which is what this option has always used.
+	 */
+	triggerIsPercentage?: boolean;
+
+	constructor(enabled = false, trigger = 0.5, triggerIsPercentage?: boolean) {
+		super(enabled, trigger);
+		this.triggerIsPercentage = triggerIsPercentage;
+	}
+
+	/**
+	 * Is the trigger currently interpreted as a share of the maximum temporal
+	 * flux storage?
+	 */
+	get isPercentage(): boolean {
+		return this.triggerIsPercentage ?? true;
+	}
+
+	set isPercentage(value: boolean) {
+		this.triggerIsPercentage = value;
+	}
+
+	load(settings: Maybe<Partial<AcquireTemporalFluxSettings>>) {
+		if (isNil(settings)) {
+			return;
+		}
+
+		super.load(settings);
+		this.triggerIsPercentage =
+			settings.triggerIsPercentage ?? this.triggerIsPercentage;
+	}
+}
+
 export class TimeSkipSettings extends SettingThresholdMax {
 	readonly cycles: CyclesSettings;
 	readonly seasons: SeasonsSettings;
@@ -16,19 +61,19 @@ export class TimeSkipSettings extends SettingThresholdMax {
 	/**
 	 * Automatically burn time crystals, in order to replenish temporal flux.
 	 *
-	 * The trigger is the share of the maximum temporal flux storage. When the
-	 * available temporal flux drops below that share, additional years are
-	 * skipped to refill it.
+	 * The trigger is the level of temporal flux below which additional years are
+	 * skipped to refill it. It is either a share of the maximum temporal flux
+	 * storage or an absolute amount.
 	 *
 	 * Skipping years only produces temporal flux if the `turnSmoothly` workshop
 	 * upgrade (which makes chronospheres produce temporal flux) is researched.
 	 */
-	readonly acquireTemporalFlux: SettingTrigger;
+	readonly acquireTemporalFlux: AcquireTemporalFluxSettings;
 
 	constructor(
 		ignoreOverheat = new Setting(),
 		activeHeatTransfer = new TimeSkipHeatSettings(),
-		acquireTemporalFlux = new SettingTrigger(false, 0.5),
+		acquireTemporalFlux = new AcquireTemporalFluxSettings(),
 	) {
 		super(false, 5);
 		this.cycles = this.initCycles();

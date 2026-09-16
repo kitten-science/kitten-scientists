@@ -11,6 +11,7 @@ import {
 	type TimeSettingsItem,
 } from "./settings/TimeSettings.js";
 import { cl } from "./tools/Log.js";
+import { resolveLimit } from "./tools/TriggerValue.js";
 import {
 	type ChronoForgeUpgrade,
 	TimeItemVariant,
@@ -223,11 +224,17 @@ export class TimeManager {
 		// Repairing a cryochamber costs temporal flux. The configured lower limit is
 		// the amount of temporal flux that has to *remain* after a repair, so that
 		// repairs never drain the flux that other features (like time acceleration)
-		// rely on. A value of 0 (or less) means "don't limit repairs at all".
+		// rely on. It is either an absolute amount or a share of the maximum
+		// temporal flux storage. A value of 0 (or less) means "don't limit repairs
+		// at all".
 		//
 		// This has to be re-evaluated for every single repair: checking it only once
 		// before the loop would allow a run of repairs to spend far below the limit.
-		const minimumTemporalFlux = this.settings.fixCryochambers.trigger;
+		const minimumTemporalFlux = resolveLimit(
+			this.settings.fixCryochambers.trigger,
+			this.settings.fixCryochambers.isPercentage,
+			this._host.game.resPool.get("temporalFlux").maxValue,
+		);
 		const temporalFluxPrice = prices
 			.filter((price) => "temporalFlux" === price.name)
 			.reduce((total, price) => total + price.val, 0);
