@@ -121,6 +121,7 @@
 	"option.faith.sacrificeUnicorns": "Sacrifice Unicorns",
 	"option.faith.transcend": "Transcend",
 	"option.festival": "Hold festivals",
+	"option.festival.ignoreProfitability": "Hold regardless of profit",
 	"option.fix.cry": "Fix Cryochamber",
 	"option.fix.cry.onlyWithFluxProduction": "Only while Flux is Produced",
 	"option.hunt": "Hunt",

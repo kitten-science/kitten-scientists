@@ -6,10 +6,37 @@ import { Setting, SettingMax, SettingTrigger } from "./Settings.js";
 
 export type VillageJobSettings = Record<Job, SettingMax>;
 
+/**
+ * Settings for holding festivals.
+ *
+ * The automation only holds a festival while the production of the resources
+ * the festival costs makes it look profitable. That check ignores every other
+ * resource a festival boosts, so it can keep festivals from being held while
+ * they would actually be worth it. This can be turned off.
+ */
+export class HoldFestivalsSettings extends Setting {
+	/** Hold festivals even while they don't look profitable. */
+	readonly ignoreProfitability: Setting;
+
+	constructor(enabled = false, ignoreProfitability = new Setting()) {
+		super(enabled);
+		this.ignoreProfitability = ignoreProfitability;
+	}
+
+	load(settings: Maybe<Partial<HoldFestivalsSettings>>) {
+		if (isNil(settings)) {
+			return;
+		}
+
+		super.load(settings);
+		this.ignoreProfitability.load(settings.ignoreProfitability);
+	}
+}
+
 export class VillageSettings extends Setting {
 	jobs: VillageJobSettings;
 
-	holdFestivals: Setting;
+	holdFestivals: HoldFestivalsSettings;
 	hunt: SettingTrigger;
 	promoteKittens: SettingTrigger;
 	promoteLeader: Setting;
@@ -17,7 +44,7 @@ export class VillageSettings extends Setting {
 
 	constructor(
 		enabled = false,
-		holdFestivals = new Setting(),
+		holdFestivals = new HoldFestivalsSettings(),
 		hunt = new SettingTrigger(false, 0.98),
 		promoteKittens = new SettingTrigger(false, 1),
 		promoteLeader = new Setting(),
@@ -52,8 +79,7 @@ export class VillageSettings extends Setting {
 			job.max = item?.max ?? job.max;
 		});
 
-		this.holdFestivals.enabled =
-			settings.holdFestivals?.enabled ?? this.holdFestivals.enabled;
+		this.holdFestivals.load(settings.holdFestivals);
 		this.hunt.load(settings.hunt);
 		this.promoteKittens.enabled =
 			settings.promoteKittens?.enabled ?? this.promoteKittens.enabled;

@@ -317,28 +317,33 @@ export class VillageManager implements Automation {
 			return;
 		}
 
-		// Check if the festival would even be profitable for any resource production.
-		const catpowProfitable =
-			4000 *
-				(craftManager.getTickVal(
-					craftManager.getResource("manpower"),
-				) as number) >
-			1500;
-		const cultureProfitable =
-			4000 *
-				(craftManager.getTickVal(
-					craftManager.getResource("culture"),
-				) as number) >
-			5000;
-		const parchProfitable =
-			4000 *
-				(craftManager.getTickVal(
-					craftManager.getResource("parchment"),
-				) as number) >
-			2500;
+		// Check if the festival would even be profitable for any resource
+		// production. This only takes the resources the festival costs into
+		// account, so it can be switched off to hold festivals for the sake of
+		// the other resources a festival boosts.
+		if (!this.settings.holdFestivals.ignoreProfitability.enabled) {
+			const catpowProfitable =
+				4000 *
+					(craftManager.getTickVal(
+						craftManager.getResource("manpower"),
+					) as number) >
+				1500;
+			const cultureProfitable =
+				4000 *
+					(craftManager.getTickVal(
+						craftManager.getResource("culture"),
+					) as number) >
+				5000;
+			const parchProfitable =
+				4000 *
+					(craftManager.getTickVal(
+						craftManager.getResource("parchment"),
+					) as number) >
+				2500;
 
-		if (!catpowProfitable && !cultureProfitable && !parchProfitable) {
-			return;
+			if (!catpowProfitable && !cultureProfitable && !parchProfitable) {
+				return;
+			}
 		}
 
 		const beforeDays = this._host.game.calendar.festivalDays;
@@ -358,7 +363,15 @@ export class VillageManager implements Automation {
 				{ name: "parchment" as const, val: 2500 },
 			],
 		});
-		controller.buyItem(model);
+		// The game decides whether the festival can be afforded, so only report
+		// what actually happened. The purchase is refused when the resources are
+		// missing, when the game is read-only, and so on, and claiming a festival
+		// that was never held is misleading.
+		const result = controller.buyItem(model);
+		if (result?.itemBought !== true) {
+			return;
+		}
+
 		this._host.engine.storeForSummary("festival");
 		if (beforeDays > 0) {
 			this._host.engine.iactivity("festival", "festival.extend", []);

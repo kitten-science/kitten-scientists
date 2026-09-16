@@ -143,6 +143,13 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
 			},
 		);
 		listAddition.addChild(this._festivals);
+		listAddition.addChild(
+			new SettingListItem(
+				this,
+				this.setting.holdFestivals.ignoreProfitability,
+				this.host.engine.i18n("option.festival.ignoreProfitability"),
+			),
+		);
 
 		this._promoteKittens = new SettingTriggerListItem(
 			this,

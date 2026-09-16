@@ -117,6 +117,7 @@
 	"option.faith.sacrificeUnicorns": "献祭独角兽",
 	"option.faith.transcend": "自动超越",
 	"option.festival": "举办节日",
+	"option.festival.ignoreProfitability": "无论收益如何都举办",
 	"option.fix.cry": "修复冷冻仓",
 	"option.fix.cry.onlyWithFluxProduction": "仅在时间通量产出时修复",
 	"option.hunt": "狩猎",
