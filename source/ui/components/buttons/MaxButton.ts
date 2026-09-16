@@ -1,4 +1,4 @@
-import type { SettingMax } from "../../../settings/Settings.js";
+import type { Setting } from "../../../settings/Settings.js";
 import { Button, type ButtonOptions } from "../Button.js";
 import type { UiComponent } from "../UiComponent.js";
 import styles from "./MaxButton.module.css";
@@ -7,11 +7,11 @@ export type MaxButtonOptions = ThisType<MaxButton> & ButtonOptions;
 
 export class MaxButton extends Button {
 	declare readonly options: MaxButtonOptions;
-	readonly setting: SettingMax;
+	readonly setting: Setting;
 
 	constructor(
 		parent: UiComponent,
-		setting: SettingMax,
+		setting: Setting,
 		options: MaxButtonOptions,
 	) {
 		super(parent, "", null, {

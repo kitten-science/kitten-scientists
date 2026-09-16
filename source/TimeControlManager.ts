@@ -26,6 +26,14 @@ export class TimeControlManager {
 	private readonly _religionManager: ReligionManager;
 	private readonly _workshopManager: WorkshopManager;
 
+	/**
+	 * The temporal flux maximum that the user interface was last refreshed for.
+	 *
+	 * The interface is only refreshed on demand, so the acquisition settings show
+	 * the maximum they detected when they were last drawn.
+	 */
+	private _reportedTemporalFluxMaximum = Number.NaN;
+
 	constructor(
 		host: KittenScientists,
 		_bonfireManager: BonfireManager,
@@ -41,6 +49,18 @@ export class TimeControlManager {
 	}
 
 	async tick(_context: FrameContext) {
+		// The maximum temporal flux storage is shown by the acquisition settings,
+		// but the user interface is only refreshed on demand. Refresh it whenever
+		// the value changed, so the settings don't keep showing a stale maximum.
+		// This is checked even while this section is disabled, because the setting
+		// is usually configured before it is switched on.
+		const temporalFluxMaximum =
+			this._host.game.resPool.get("temporalFlux").maxValue;
+		if (temporalFluxMaximum !== this._reportedTemporalFluxMaximum) {
+			this._reportedTemporalFluxMaximum = temporalFluxMaximum;
+			this._host.refreshEntireUserInterface();
+		}
+
 		if (!this.settings.enabled) {
 			return;
 		}
@@ -564,10 +584,11 @@ export class TimeControlManager {
 	 * Burn time crystals in order to replenish temporal flux.
 	 *
 	 * This is deliberately independent of the regular time skip: it ignores the
-	 * configured maximum amount of years, the season/cycle selection and the
-	 * overheat handling, because its purpose is to *obtain* temporal flux, not to
-	 * skip time on the player's terms. Only what the shatter itself consumes
-	 * (time crystals, void) limits it.
+	 * configured maximum amount of years and the season/cycle selection, because
+	 * its purpose is to *obtain* temporal flux, not to skip time on the player's
+	 * terms. Only what the shatter itself consumes (time crystals, void) limits
+	 * it. The stored heat limits it as well, unless the player opted into
+	 * ignoring that, because an overheated shatter costs a premium.
 	 */
 	acquireTemporalFlux() {
 		// Shattering requires the Chronoforge.
@@ -578,6 +599,17 @@ export class TimeControlManager {
 		// Don't shatter while we're in a temporal paradox.
 		if (this._host.game.calendar.day < 0) {
 			return;
+		}
+
+		// If we have used up our heat capacity, wait for it to cool down. Unlike
+		// the regular time skip, this doesn't limit how many years we may skip,
+		// it only keeps us from paying the overheat premium for obtaining flux.
+		if (!this.settings.timeSkip.acquireTemporalFlux.ignoreOverheat.enabled) {
+			const heatMax = this._host.game.getEffect("heatMax");
+			const heatNow = this._host.game.time.heat;
+			if (heatMax <= heatNow) {
+				return;
+			}
 		}
 
 		const yearsWanted = this.getTemporalFluxSkips();

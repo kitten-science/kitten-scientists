@@ -2,13 +2,9 @@ import type { SupportedLocale } from "../Engine.js";
 import { Icons } from "../images/Icons.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { TimeControlSettings } from "../settings/TimeControlSettings.js";
-import type {
-	AcquireTemporalFluxSettings,
-	TimeSkipSettings,
-} from "../settings/TimeSkipSettings.js";
+import type { TimeSkipSettings } from "../settings/TimeSkipSettings.js";
 import { ucfirst } from "../tools/Format.js";
-import { parsePercentageEntry } from "../tools/Numbers.js";
-import { renderTrigger } from "../tools/TriggerValue.js";
+import { AcquireTemporalFluxSettingsUi } from "./AcquireTemporalFluxSettingsUi.js";
 import stylesButton from "./components/Button.module.css";
 import { CollapsiblePanel } from "./components/CollapsiblePanel.js";
 import { Container } from "./components/Container.js";
@@ -22,7 +18,6 @@ import stylesSettingListItem from "./components/SettingListItem.module.css";
 import { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
 import { TimeSkipHeatSettingsUi } from "./TimeSkipHeatSettingsUi.js";
 
@@ -33,7 +28,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<
 	private readonly _cycles: CollapsiblePanel;
 	private readonly _seasons: CollapsiblePanel;
 	private readonly _activeHeatTransferUI: TimeSkipHeatSettingsUi;
-	private readonly _acquireTemporalFlux: SettingTriggerListItem<AcquireTemporalFluxSettings>;
+	private readonly _acquireTemporalFlux: AcquireTemporalFluxSettingsUi;
 
 	constructor(
 		parent: UiComponent,
@@ -190,91 +185,13 @@ export class TimeSkipSettingsUi extends SettingsPanel<
 			settings,
 			sectionSetting,
 		);
-		// The callbacks below lose the narrowed type of `this.setting`, because it
-		// is declared on the generic base class.
-		const panelSettings = this.setting;
-		this._acquireTemporalFlux =
-			new SettingTriggerListItem<AcquireTemporalFluxSettings>(
-				this,
-				panelSettings.acquireTemporalFlux,
-				locale,
-				this.host.engine.i18n("option.time.skip.acquireTemporalFlux"),
-				{
-					onCheck: (_isBatchProcess?: boolean) => {
-						this.host.engine.imessage("status.sub.enable", [
-							this.host.engine.i18n("option.time.skip.acquireTemporalFlux"),
-						]);
-					},
-					onRefreshTrigger() {
-						const { acquireTemporalFlux } = panelSettings;
-						this.triggerButton.inactive = !this.setting.enabled;
-						this.triggerButton.ineffective =
-							sectionSetting.enabled &&
-							settings.enabled &&
-							this.setting.enabled &&
-							acquireTemporalFlux.trigger <= 0;
-						this.triggerButton.element[0].title = this.host.engine.i18n(
-							"ui.trigger.acquireTemporalFlux.title",
-							[
-								renderTrigger(
-									this.host,
-									acquireTemporalFlux.trigger,
-									acquireTemporalFlux.isPercentage,
-									locale.selected,
-								),
-							],
-						);
-					},
-					onSetTrigger: async () => {
-						const { acquireTemporalFlux } = panelSettings;
-						const value = await Dialog.prompt(
-							this,
-							this.host.engine.i18n("ui.trigger.acquireTemporalFlux.prompt"),
-							this.host.engine.i18n(
-								"ui.trigger.acquireTemporalFlux.promptTitle",
-								[
-									renderTrigger(
-										this.host,
-										acquireTemporalFlux.trigger,
-										acquireTemporalFlux.isPercentage,
-										locale.selected,
-									),
-								],
-							),
-							renderTrigger(
-								this.host,
-								acquireTemporalFlux.trigger,
-								acquireTemporalFlux.isPercentage,
-								"invariant",
-							),
-							this.host.engine.i18n(
-								"ui.trigger.acquireTemporalFlux.promptExplainer",
-							),
-						);
-
-						if (value === undefined || value === "") {
-							return;
-						}
-
-						// A trailing percentage sign switches this trigger to a share of
-						// the maximum temporal flux storage, an absolute value switches it
-						// back. Input that isn't a number at all is treated like hitting
-						// cancel, as the explainer of this prompt promises.
-						const entry = parsePercentageEntry(value);
-						if (entry === null || entry.kind === "invalid") {
-							return;
-						}
-
-						acquireTemporalFlux.isPercentage = entry.kind === "percentage";
-						acquireTemporalFlux.trigger = entry.value;
-					},
-					onUnCheck: (_isBatchProcess?: boolean) => {
-						this.host.engine.imessage("status.sub.disable", [
-							this.host.engine.i18n("option.time.skip.acquireTemporalFlux"),
-						]);
-					},
-				},
-			);
+		this._acquireTemporalFlux = new AcquireTemporalFluxSettingsUi(
+			this,
+			this.setting.acquireTemporalFlux,
+			locale,
+			settings,
+			sectionSetting,
+		);
 
 		this.addChildContent(
 			new SettingsList(this, {

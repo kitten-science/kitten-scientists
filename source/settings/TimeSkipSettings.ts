@@ -16,8 +16,22 @@ export type SeasonsSettings = Record<Season, Setting>;
  * or as an absolute amount.
  */
 export class AcquireTemporalFluxSettings extends SettingTrigger {
-	constructor(enabled = false, trigger = 0.5, triggerIsPercentage?: boolean) {
+	/**
+	 * Burn time crystals even while the stored heat has reached its maximum.
+	 *
+	 * Combusting time crystals while overheated costs a premium, so by default
+	 * the acquisition waits for the heat to cool down before it burns any.
+	 */
+	readonly ignoreOverheat: Setting;
+
+	constructor(
+		enabled = false,
+		trigger = 0.5,
+		triggerIsPercentage?: boolean,
+		ignoreOverheat = new Setting(),
+	) {
 		super(enabled, trigger, triggerIsPercentage);
+		this.ignoreOverheat = ignoreOverheat;
 	}
 
 	load(settings: Maybe<Partial<AcquireTemporalFluxSettings>>) {
@@ -26,6 +40,7 @@ export class AcquireTemporalFluxSettings extends SettingTrigger {
 		}
 
 		super.load(settings);
+		this.ignoreOverheat.load(settings.ignoreOverheat);
 	}
 }
 
@@ -44,6 +59,9 @@ export class TimeSkipSettings extends SettingThresholdMax {
 	 *
 	 * Skipping years only produces temporal flux if the `turnSmoothly` workshop
 	 * upgrade (which makes chronospheres produce temporal flux) is researched.
+	 *
+	 * While the stored heat has reached its maximum, no crystals are burned,
+	 * unless `acquireTemporalFlux.ignoreOverheat` is enabled.
 	 */
 	readonly acquireTemporalFlux: AcquireTemporalFluxSettings;
 
