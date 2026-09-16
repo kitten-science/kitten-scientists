@@ -63,35 +63,14 @@ export class FixCryochambersSettings extends SettingThreshold {
 	 */
 	onlyWithFluxProduction: Setting;
 
-	/**
-	 * Was the trigger entered as a share of the maximum temporal flux storage?
-	 *
-	 * Unset for saves that predate the option, in which case the trigger is an
-	 * absolute amount.
-	 */
-	triggerIsPercentage?: boolean;
-
 	constructor(
 		enabled = false,
 		threshold = 0,
 		onlyWithFluxProduction = new Setting(false),
 		triggerIsPercentage?: boolean,
 	) {
-		super(enabled, threshold);
+		super(enabled, threshold, triggerIsPercentage);
 		this.onlyWithFluxProduction = onlyWithFluxProduction;
-		this.triggerIsPercentage = triggerIsPercentage;
-	}
-
-	/**
-	 * Is the trigger currently interpreted as a share of the maximum temporal
-	 * flux storage?
-	 */
-	get isPercentage(): boolean {
-		return this.triggerIsPercentage ?? false;
-	}
-
-	set isPercentage(value: boolean) {
-		this.triggerIsPercentage = value;
 	}
 
 	load(settings: Maybe<Partial<FixCryochambersSettings>>) {
@@ -100,8 +79,6 @@ export class FixCryochambersSettings extends SettingThreshold {
 		}
 
 		super.load(settings);
-		this.triggerIsPercentage =
-			settings.triggerIsPercentage ?? this.triggerIsPercentage;
 		this.onlyWithFluxProduction.load(settings.onlyWithFluxProduction);
 	}
 }

@@ -1,8 +1,8 @@
 import type { SupportedLocale } from "../../../Engine.js";
 import { Icons } from "../../../images/Icons.js";
-import {
-	type SettingOptions,
-	type SettingThreshold,
+import type {
+	SettingOptions,
+	SettingThreshold,
 	SettingTrigger,
 } from "../../../settings/Settings.js";
 import { Button, type ButtonOptions } from "../Button.js";
@@ -18,8 +18,18 @@ export type TriggerButtonOptions = ThisType<TriggerButton> &
 
 export class TriggerButton extends Button {
 	declare readonly options: TriggerButtonOptions;
-	readonly behavior: TriggerButtonBehavior;
 	readonly setting: SettingTrigger | SettingThreshold;
+
+	/**
+	 * How this button's value is currently interpreted.
+	 *
+	 * This follows the setting, not its class: the same trigger can be given
+	 * either as a share of a maximum or as an absolute value, and the user picks
+	 * the mode with the input itself.
+	 */
+	get behavior(): TriggerButtonBehavior {
+		return this.setting.isPercentage ? "percentage" : "integer";
+	}
 
 	constructor(
 		parent: UiComponent,
@@ -56,9 +66,6 @@ export class TriggerButton extends Button {
 				}
 			},
 		});
-
-		this.behavior =
-			setting instanceof SettingTrigger ? "percentage" : "integer";
 
 		this.setting = setting;
 	}

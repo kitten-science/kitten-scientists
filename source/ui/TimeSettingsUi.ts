@@ -195,7 +195,7 @@ export class TimeSettingsUi extends SettingsPanel<
 						// it back. Values that aren't a number at all are treated as if
 						// the user hit cancel.
 						const entry = parsePercentageEntry(value);
-						if (entry === null) {
+						if (entry === null || entry.kind === "invalid") {
 							return;
 						}
 

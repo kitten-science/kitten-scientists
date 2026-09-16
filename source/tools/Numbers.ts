@@ -27,8 +27,20 @@ export interface ParsedPercentage {
 	readonly value: number;
 }
 
-export type ParsedEntry = ParsedAbsolute | ParsedPercentage;
+/**
+ * Input that can't be read as a number.
+ *
+ * This is reported as a value of its own, instead of as a `null` result, so
+ * that callers which have to return a number regardless (like
+ * `parsePercentage`) can keep the current value instead of storing `NaN`.
+ */
+export interface ParsedInvalid {
+	readonly kind: "invalid";
+}
 
+export type ParsedEntry = ParsedAbsolute | ParsedPercentage | ParsedInvalid;
+
+/** The result of parsing input that might be a number, or might be nothing. */
 export type ParseEntryResult = ParsedEntry | null;
 
 /**
@@ -82,7 +94,7 @@ function applyFactor(mantissa: string, factor: number): number | null {
  * @param value - User input, e.g. `52`, `1e42` or `4.2T`.
  * @returns The parsed value, or `null` if the input isn't a valid number.
  */
-export function parseAbsoluteEntry(value: string): ParseEntryResult {
+export function parseAbsoluteEntry(value: string): ParsedAbsolute | null {
 	if (value === "" || value === "∞") {
 		return null;
 	}
@@ -107,23 +119,25 @@ export function parseAbsoluteEntry(value: string): ParseEntryResult {
  * a share (so `50%` becomes `0.5`), anything else is an absolute value.
  *
  * @param value - User input, e.g. `50%`, `52` or `1e42`.
- * @returns The parsed entry, or `null` if the input isn't a valid number.
+ * @returns The parsed entry, or `null` if the input was empty.
  */
 export function parsePercentageEntry(value: string): ParseEntryResult {
+	if (value.trim() === "") {
+		return null;
+	}
+
 	const trimmedValue = value.trim();
 	const match = trimmedValue.endsWith("%")
 		? /^(.*)%$/.exec(trimmedValue)
 		: null;
 	if (match === null) {
 		const absoluteValue = parseAbsoluteEntry(value);
-		return absoluteValue === null
-			? null
-			: { kind: "absolute", value: absoluteValue.value };
+		return absoluteValue ?? { kind: "invalid" };
 	}
 
 	const percentage = parseAbsoluteEntry(match[1]);
 	if (percentage === null) {
-		return null;
+		return { kind: "invalid" };
 	}
 
 	// A share of a maximum can't be negative or exceed the maximum. Clamping is

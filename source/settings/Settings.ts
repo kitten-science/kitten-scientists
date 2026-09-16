@@ -55,9 +55,27 @@ export class SettingLimited extends Setting {
 export class SettingTrigger extends Setting {
 	trigger: number;
 
-	constructor(enabled = false, trigger = -1) {
+	/** Was the trigger entered as an absolute value? */
+	triggerIsPercentage?: boolean;
+
+	constructor(enabled = false, trigger = -1, triggerIsPercentage?: boolean) {
 		super(enabled);
 		this.trigger = trigger;
+		this.triggerIsPercentage = triggerIsPercentage;
+	}
+
+	/**
+	 * Is the trigger a share of the associated maximum?
+	 *
+	 * A share is what this kind of trigger has always been, so that is the mode
+	 * used when the setting was loaded from an older save.
+	 */
+	get isPercentage(): boolean {
+		return this.triggerIsPercentage ?? true;
+	}
+
+	set isPercentage(value: boolean) {
+		this.triggerIsPercentage = value;
 	}
 
 	load(setting: Maybe<Partial<SettingTrigger>>) {
@@ -66,6 +84,8 @@ export class SettingTrigger extends Setting {
 		}
 
 		super.load(setting);
+		this.triggerIsPercentage =
+			setting.triggerIsPercentage ?? this.triggerIsPercentage;
 		this.trigger = setting.trigger ?? this.trigger;
 	}
 }
@@ -77,9 +97,27 @@ export class SettingTrigger extends Setting {
 export class SettingThreshold extends Setting {
 	trigger: number;
 
-	constructor(enabled = false, threshold = 1) {
+	/** Was the trigger entered as a share of a maximum? */
+	triggerIsPercentage?: boolean;
+
+	constructor(enabled = false, threshold = 1, triggerIsPercentage?: boolean) {
 		super(enabled);
 		this.trigger = threshold;
+		this.triggerIsPercentage = triggerIsPercentage;
+	}
+
+	/**
+	 * Is the trigger a share of the associated maximum?
+	 *
+	 * An absolute value is what this kind of trigger has always been, so that is
+	 * the mode used when the setting was loaded from an older save.
+	 */
+	get isPercentage(): boolean {
+		return this.triggerIsPercentage ?? false;
+	}
+
+	set isPercentage(value: boolean) {
+		this.triggerIsPercentage = value;
 	}
 
 	load(setting: Maybe<Partial<SettingThreshold>>) {
@@ -88,6 +126,8 @@ export class SettingThreshold extends Setting {
 		}
 
 		super.load(setting);
+		this.triggerIsPercentage =
+			setting.triggerIsPercentage ?? this.triggerIsPercentage;
 		this.trigger = setting.trigger ?? this.trigger;
 	}
 }
@@ -113,9 +153,32 @@ export class SettingMax extends Setting {
 export class SettingLimitedMax extends SettingLimited implements SettingMax {
 	max: number;
 
-	constructor(enabled = false, limited = false, max = 0) {
+	/** Was the trigger entered as a share of a maximum? */
+	triggerIsPercentage?: boolean;
+
+	constructor(
+		enabled = false,
+		limited = false,
+		max = 0,
+		triggerIsPercentage?: boolean,
+	) {
 		super(enabled, limited);
 		this.max = max;
+		this.triggerIsPercentage = triggerIsPercentage;
+	}
+
+	/**
+	 * Is the trigger a share of the associated maximum?
+	 *
+	 * An absolute value is what this kind of trigger has always been, so that is
+	 * the mode used when the setting was loaded from an older save.
+	 */
+	get isPercentage(): boolean {
+		return this.triggerIsPercentage ?? false;
+	}
+
+	set isPercentage(value: boolean) {
+		this.triggerIsPercentage = value;
 	}
 
 	load(setting: Maybe<Partial<SettingLimitedMax>>) {
@@ -124,6 +187,8 @@ export class SettingLimitedMax extends SettingLimited implements SettingMax {
 		}
 
 		super.load(setting);
+		this.triggerIsPercentage =
+			setting.triggerIsPercentage ?? this.triggerIsPercentage;
 		this.max = setting.max ?? this.max;
 	}
 }
@@ -134,8 +199,14 @@ export class SettingLimitedMaxTrigger
 {
 	trigger: number;
 
-	constructor(enabled = false, limited = false, max = 0, trigger = -1) {
-		super(enabled, limited, max);
+	constructor(
+		enabled = false,
+		limited = false,
+		max = 0,
+		trigger = -1,
+		triggerIsPercentage?: boolean,
+	) {
+		super(enabled, limited, max, triggerIsPercentage);
 		this.trigger = trigger;
 	}
 
@@ -155,9 +226,31 @@ export class SettingLimitedTrigger
 {
 	trigger: number;
 
-	constructor(enabled = false, limited = false, trigger = -1) {
+	/** Was the trigger entered as a share of a maximum? */
+	triggerIsPercentage?: boolean;
+
+	constructor(
+		enabled = false,
+		limited = false,
+		trigger = -1,
+		triggerIsPercentage?: boolean,
+	) {
 		super(enabled, limited);
 		this.trigger = trigger;
+		this.triggerIsPercentage = triggerIsPercentage;
+	}
+
+	/**
+	 * Is the trigger a share of the associated maximum?
+	 *
+	 * A share is what this kind of trigger has always been.
+	 */
+	get isPercentage(): boolean {
+		return this.triggerIsPercentage ?? true;
+	}
+
+	set isPercentage(value: boolean) {
+		this.triggerIsPercentage = value;
 	}
 
 	load(setting: Maybe<Partial<SettingLimitedTrigger>>) {
@@ -166,6 +259,8 @@ export class SettingLimitedTrigger
 		}
 
 		super.load(setting);
+		this.triggerIsPercentage =
+			setting.triggerIsPercentage ?? this.triggerIsPercentage;
 		this.trigger = setting.trigger ?? this.trigger;
 	}
 }

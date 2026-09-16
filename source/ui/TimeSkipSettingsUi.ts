@@ -261,7 +261,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<
 						// back. Input that isn't a number at all is treated like hitting
 						// cancel, as the explainer of this prompt promises.
 						const entry = parsePercentageEntry(value);
-						if (entry === null) {
+						if (entry === null || entry.kind === "invalid") {
 							return;
 						}
 

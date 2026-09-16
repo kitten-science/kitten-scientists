@@ -255,14 +255,16 @@ export class KittenScientists {
 	 * Turns a string like 52.7 into the number 0.527
 	 *
 	 * The same syntax as `parseFloat` is accepted, where the trailing percentage
-	 * sign is optional. A value that exceeds 100% is clamped to 100%.
+	 * sign is optional. A value that exceeds 100% is clamped to 100%, and input
+	 * that isn't a number at all is reported as `NaN`, which callers have to
+	 * handle.
 	 *
 	 * @param value - String representation of a percentage.
 	 * @returns A number between 0 and 1 representing the described percentage.
 	 */
 	parsePercentage(value: string): number {
 		const entry = parsePercentageEntry(value);
-		if (entry === null) {
+		if (entry === null || entry.kind === "invalid") {
 			return Number.NaN;
 		}
 

@@ -16,29 +16,8 @@ export type SeasonsSettings = Record<Season, Setting>;
  * or as an absolute amount.
  */
 export class AcquireTemporalFluxSettings extends SettingTrigger {
-	/**
-	 * Was the trigger entered as a share of the maximum temporal flux storage?
-	 *
-	 * Unset for saves that predate the option, in which case the trigger is a
-	 * share, which is what this option has always used.
-	 */
-	triggerIsPercentage?: boolean;
-
 	constructor(enabled = false, trigger = 0.5, triggerIsPercentage?: boolean) {
-		super(enabled, trigger);
-		this.triggerIsPercentage = triggerIsPercentage;
-	}
-
-	/**
-	 * Is the trigger currently interpreted as a share of the maximum temporal
-	 * flux storage?
-	 */
-	get isPercentage(): boolean {
-		return this.triggerIsPercentage ?? true;
-	}
-
-	set isPercentage(value: boolean) {
-		this.triggerIsPercentage = value;
+		super(enabled, trigger, triggerIsPercentage);
 	}
 
 	load(settings: Maybe<Partial<AcquireTemporalFluxSettings>>) {
@@ -47,8 +26,6 @@ export class AcquireTemporalFluxSettings extends SettingTrigger {
 		}
 
 		super.load(settings);
-		this.triggerIsPercentage =
-			settings.triggerIsPercentage ?? this.triggerIsPercentage;
 	}
 }
 
