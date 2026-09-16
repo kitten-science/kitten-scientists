@@ -586,9 +586,10 @@ export class TimeControlManager {
 	 * This is deliberately independent of the regular time skip: it ignores the
 	 * configured maximum amount of years and the season/cycle selection, because
 	 * its purpose is to *obtain* temporal flux, not to skip time on the player's
-	 * terms. Only what the shatter itself consumes (time crystals, void) limits
-	 * it. The stored heat limits it as well, unless the player opted into
-	 * ignoring that, because an overheated shatter costs a premium.
+	 * terms. What the shatter itself consumes (time crystals and void) limits it,
+	 * and so does the heat that is still missing from the chrono heat capacity,
+	 * unless the player opted into ignoring the heat, because an overheated
+	 * shatter costs a premium.
 	 */
 	acquireTemporalFlux() {
 		// Shattering requires the Chronoforge.
@@ -601,15 +602,23 @@ export class TimeControlManager {
 			return;
 		}
 
-		// If we have used up our heat capacity, wait for it to cool down. Unlike
-		// the regular time skip, this doesn't limit how many years we may skip,
-		// it only keeps us from paying the overheat premium for obtaining flux.
-		if (!this.settings.timeSkip.acquireTemporalFlux.ignoreOverheat.enabled) {
+		const setting = this.settings.timeSkip.acquireTemporalFlux;
+
+		// Combusting a time crystal generates heat, and combusting while the heat
+		// capacity is exhausted costs a premium. So unless the player opted into
+		// ignoring the heat, only as many crystals may be burned as the heat that
+		// is still missing from the capacity covers. This limits the *amount*, not
+		// the feature: burning fewer crystals than the requested flux level needs
+		// is fine, the acquisition simply continues on a later frame.
+		let heatSkips = Number.POSITIVE_INFINITY;
+		if (!setting.ignoreOverheat.enabled) {
 			const heatMax = this._host.game.getEffect("heatMax");
 			const heatNow = this._host.game.time.heat;
-			if (heatMax <= heatNow) {
-				return;
-			}
+			const heatPerSkip = this._host.game.challenges.getChallenge("1000Years")
+				.researched
+				? 5
+				: 10;
+			heatSkips = heatMax <= heatNow ? 0 : (heatMax - heatNow) / heatPerSkip;
 		}
 
 		const yearsWanted = this.getTemporalFluxSkips();
@@ -630,7 +639,7 @@ export class TimeControlManager {
 				: Number.POSITIVE_INFINITY;
 
 		const yearsToSkip = Math.floor(
-			Math.min(yearsWanted, crystalSkips, voidSkips),
+			Math.min(yearsWanted, crystalSkips, voidSkips, heatSkips),
 		);
 		if (yearsToSkip <= 0) {
 			return;
