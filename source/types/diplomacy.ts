@@ -198,6 +198,12 @@ export type UnsafeRace = {
 	embassyLevel: number;
 	embassyPrices?: Array<Price>;
 	energy: number;
+	/**
+	 * Is this race still unknown to the player?
+	 *
+	 * The races that aren't hidden are the ones the game hands out at random.
+	 */
+	hidden: boolean;
 	name: Race;
 	sells: Array<UnsafeTradeSellOffer>;
 	standing: number;

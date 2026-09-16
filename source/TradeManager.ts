@@ -328,141 +328,110 @@ export class TradeManager implements Automation {
 		}
 	}
 
+	/**
+	 * Send explorers to look for new trade races.
+	 *
+	 * The game decides what an expedition can discover and what it costs, so
+	 * this uses the game's own exploration button instead of unlocking a race
+	 * directly. Unlocking a race directly also meant asking for one when the
+	 * game had none to give, which threw and ended the whole engine loop.
+	 *
+	 * @param context The context of the current frame.
+	 */
 	autoUnlock(context: FrameContext) {
 		if (!this._host.game.tabs[4].visible) {
 			return;
 		}
 
-		// Check how many races we could reasonably unlock at this point.
-		const maxRaces = this._host.game.diplomacy.get("leviathans").unlocked
-			? 8
-			: 7;
-		// If we haven't unlocked that many races yet...
-		if (this._host.game.diplomacyTab.racePanels.length < maxRaces) {
-			// Get the currently available catpower.
-			let manpower = this._workshopManager.getValueAvailable("manpower");
-			// TODO: These should be checked in reverse order. Otherwise the check for lizards
-			//       can cause the zebras to be discovered at later stages in the game. Then it
-			//       gets to the check for the zebras and doesn't explore again, as they're
-			//       already unlocked. Then it takes another iteration to unlock the other race.
-			// Send explorers if we haven't discovered the lizards yet.
-			if (!this._host.game.diplomacy.get("lizards").unlocked) {
-				if (manpower >= 1000) {
-					this._host.game.resPool.get("manpower").value -= 1000;
-					const unlockedRace = mustExist(
-						this._host.game.diplomacy.unlockRandomRace(),
-					);
-					this._host.engine.iactivity("trade.explore", "act.trade.explore", [
-						unlockedRace.title,
-					]);
-					manpower -= 1000;
-					context.requestGameUiRefresh = true;
-				}
-			}
-
-			// Do exactly the same for the sharks.
-			if (!this._host.game.diplomacy.get("sharks").unlocked) {
-				if (manpower >= 1000) {
-					this._host.game.resPool.get("manpower").value -= 1000;
-					const unlockedRace = mustExist(
-						this._host.game.diplomacy.unlockRandomRace(),
-					);
-					this._host.engine.iactivity("trade.explore", "act.trade.explore", [
-						unlockedRace.title,
-					]);
-					manpower -= 1000;
-					context.requestGameUiRefresh = true;
-				}
-			}
-
-			// Do exactly the same for the griffins.
-			if (!this._host.game.diplomacy.get("griffins").unlocked) {
-				if (manpower >= 1000) {
-					this._host.game.resPool.get("manpower").value -= 1000;
-					const unlockedRace = mustExist(
-						this._host.game.diplomacy.unlockRandomRace(),
-					);
-					this._host.engine.iactivity("trade.explore", "act.trade.explore", [
-						unlockedRace.title,
-					]);
-					manpower -= 1000;
-					context.requestGameUiRefresh = true;
-				}
-			}
-
-			// For nagas, we additionally need enough culture.
-			if (
-				!this._host.game.diplomacy.get("nagas").unlocked &&
-				this._host.game.resPool.get("culture").value >= 1500
-			) {
-				if (manpower >= 1000) {
-					this._host.game.resPool.get("manpower").value -= 1000;
-					const unlockedRace = mustExist(
-						this._host.game.diplomacy.unlockRandomRace(),
-					);
-					this._host.engine.iactivity("trade.explore", "act.trade.explore", [
-						unlockedRace.title,
-					]);
-					manpower -= 1000;
-					context.requestGameUiRefresh = true;
-				}
-			}
-
-			// Zebras require us to have a ship.
-			if (
-				!this._host.game.diplomacy.get("zebras").unlocked &&
-				this._host.game.resPool.get("ship").value >= 1
-			) {
-				if (manpower >= 1000) {
-					this._host.game.resPool.get("manpower").value -= 1000;
-					const unlockedRace = mustExist(
-						this._host.game.diplomacy.unlockRandomRace(),
-					);
-					this._host.engine.iactivity("trade.explore", "act.trade.explore", [
-						unlockedRace.title,
-					]);
-					manpower -= 1000;
-					context.requestGameUiRefresh = true;
-				}
-			}
-
-			// For spiders, we need 100 ships and 125000 science.
-			if (
-				!this._host.game.diplomacy.get("spiders").unlocked &&
-				mustExist(this._host.game.resPool.get("ship")).value >= 100 &&
-				mustExist(this._host.game.resPool.get("science")).maxValue > 125000
-			) {
-				if (manpower >= 1000) {
-					mustExist(this._host.game.resPool.get("manpower")).value -= 1000;
-					const unlockedRace = mustExist(
-						this._host.game.diplomacy.unlockRandomRace(),
-					);
-					this._host.engine.iactivity("trade.explore", "act.trade.explore", [
-						unlockedRace.title,
-					]);
-					manpower -= 1000;
-					context.requestGameUiRefresh = true;
-				}
-			}
-
-			// Dragons require nuclear fission to be researched.
-			if (
-				!this._host.game.diplomacy.get("dragons").unlocked &&
-				this._host.game.science.get("nuclearFission").researched
-			) {
-				if (manpower >= 1000) {
-					mustExist(this._host.game.resPool.get("manpower")).value -= 1000;
-					const unlockedRace = mustExist(
-						this._host.game.diplomacy.unlockRandomRace(),
-					);
-					this._host.engine.iactivity("trade.explore", "act.trade.explore", [
-						unlockedRace.title,
-					]);
-					manpower -= 1000;
-					context.requestGameUiRefresh = true;
-				}
-			}
+		// Don't pay for an expedition that cannot find anything. The game does
+		// not expose the unlock conditions, they are hard-coded in
+		// `unlockRandomRace()`, so they are mirrored here.
+		if (!this.canDiscoverRace()) {
+			return;
 		}
+
+		const racesBefore = new Set(
+			this._host.game.diplomacy.races
+				.filter((race) => race.unlocked)
+				.map((race) => race.name),
+		);
+
+		const controller = new classes.trade.ui.SendExplorersButtonController(
+			this._host.game,
+		);
+		// The controller type doesn't carry the model type it works with, so the
+		// part of the model that is read here is declared on the spot.
+		const model = controller.fetchModel({
+			prices: [{ name: "manpower" as const, val: 1000 }],
+		}) as { enabled?: boolean };
+
+		// Almost all of the cost is refunded when an expedition finds nothing,
+		// and the game reports what is missing itself, so only an actual
+		// discovery is worth reporting here.
+		const result = controller.buyItem(model);
+		if (result?.itemBought !== true) {
+			return;
+		}
+
+		const discovered = this._host.game.diplomacy.races.find(
+			(race) => race.unlocked && !racesBefore.has(race.name),
+		);
+		if (isNil(discovered)) {
+			return;
+		}
+
+		this._host.engine.iactivity("trade.explore", "act.trade.explore", [
+			discovered.title,
+		]);
+		this._host.engine.storeForSummary("trade.explore", 1);
+		context.requestGameUiRefresh = true;
+	}
+
+	/**
+	 * Can sending explorers discover a race right now?
+	 *
+	 * The game has two kinds of races: the ones it hands out at random, which
+	 * are the ones that aren't hidden, and the ones that require a hard-coded
+	 * condition to be met.
+	 *
+	 * @returns `true` if an expedition can find something.
+	 */
+	canDiscoverRace(): boolean {
+		const diplomacy = this._host.game.diplomacy;
+
+		// The races the game picks from at random.
+		if (diplomacy.races.some((race) => !race.unlocked && !race.hidden)) {
+			return true;
+		}
+
+		// These conditions mirror `unlockRandomRace()`.
+		if (
+			!diplomacy.get("nagas").unlocked &&
+			this._host.game.resPool.get("culture").value >= 1500
+		) {
+			return true;
+		}
+		if (
+			!diplomacy.get("zebras").unlocked &&
+			this._host.game.resPool.get("ship").value >= 1
+		) {
+			return true;
+		}
+		if (
+			!diplomacy.get("spiders").unlocked &&
+			this._host.game.resPool.get("ship").value >= 100 &&
+			this._host.game.resPool.get("science").maxValue > 125000
+		) {
+			return true;
+		}
+		if (
+			!diplomacy.get("dragons").unlocked &&
+			this._host.game.science.get("nuclearFission").researched
+		) {
+			return true;
+		}
+
+		return false;
 	}
 
 	autoTradeBlackcoin() {
