@@ -46,8 +46,8 @@ export class VillageManager implements Automation {
 			this.autoPromoteLeader();
 		}
 
-		if (this.settings.promoteKittens.enabled) {
-			this.autoPromoteKittens();
+		if (this.settings.promoteEngineers.enabled) {
+			this.autoPromoteEngineers();
 		}
 	}
 
@@ -161,9 +161,54 @@ export class VillageManager implements Automation {
 		this._host.engine.iactivity("leader.elect", "act.leader.elect");
 	}
 
-	autoPromoteKittens(): void {
+	autoPromoteAmbassadors(): void {
 		const gold = this._workshopManager.getResource("gold");
-		if (this.settings.promoteKittens.trigger < gold.value / gold.maxValue) {
+		if (this.settings.promoteAmbassadors.trigger < gold.value / gold.maxValue) {
+			return;
+		}
+
+		let ranksPromotedTotal = 0;
+		for (
+			let kittenIndex = 0;
+			kittenIndex < this._host.game.village.sim.kittens.length;
+			kittenIndex++
+		) {
+			if (
+				this._host.game.village.sim.kittens[kittenIndex].job !== "ambassador"
+			) {
+				continue;
+			}
+
+			let ranksPromoted = 0;
+			let wasPromoted = false;
+			do {
+				wasPromoted =
+					this._host.game.village.sim.promote(
+						this._host.game.village.sim.kittens[kittenIndex],
+					) === 1;
+				if (wasPromoted) {
+					++ranksPromoted;
+				}
+			} while (wasPromoted === true);
+
+			if (ranksPromoted === 0) {
+				break;
+			}
+
+			ranksPromotedTotal += ranksPromoted;
+		}
+		this._host.engine.iactivity("promote.ambassadors", "act.kittens.promote", [
+			ranksPromotedTotal,
+		]);
+		this._host.engine.storeForSummary(
+			"promote.ambassadors",
+			ranksPromotedTotal,
+		);
+	}
+
+	autoPromoteEngineers(): void {
+		const gold = this._workshopManager.getResource("gold");
+		if (this.settings.promoteEngineers.trigger < gold.value / gold.maxValue) {
 			return;
 		}
 
@@ -172,7 +217,6 @@ export class VillageManager implements Automation {
 			kittenIndex < this._host.game.village.sim.kittens.length;
 			kittenIndex++
 		) {
-			let tier = -1;
 			const engineerSpeciality =
 				this._host.game.village.sim.kittens[kittenIndex].engineerSpeciality;
 			// If this kitten has no engineer specialty, skip it.
@@ -181,7 +225,7 @@ export class VillageManager implements Automation {
 			}
 
 			// Check which rank would be ideal for their craft.
-			tier = mustExist(
+			const tier = mustExist(
 				this._host.game.workshop.getCraft(engineerSpeciality),
 			).tier;
 			// If the rank has already been reached, check next kitten.
@@ -193,8 +237,8 @@ export class VillageManager implements Automation {
 			// No need to look further.
 			this._host.game.village.promoteKittens();
 
-			this._host.engine.iactivity("kittens.promote", "act.kittens.promote");
-			this._host.engine.storeForSummary("kittens.promote", 1);
+			this._host.engine.iactivity("promote.engineers", "act.kittens.promote");
+			this._host.engine.storeForSummary("promote.engineers", 1);
 			return;
 		}
 	}

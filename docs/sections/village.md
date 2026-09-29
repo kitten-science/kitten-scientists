@@ -16,9 +16,13 @@ Sends your hunters on a hunt, when your catpower has reached **Trigger** of its 
 
 Holds festivals whenever they are considered profitable. A festival is considered profitable if all of the spent resources are regained over the period of the festival.
 
-### Promote Kittens
+### Promote Ambassadors
 
-Promotes your kittens, when your gold has reached **Trigger** of its capacity. Kittens are promoted if you have engineers that would profit from having a higher rank. Otherwise, high ranks are meaningless.
+Promotes your kitten with Ambassador jobs, when your gold has reached **Trigger** of its capacity.
+
+### Promote Engineers
+
+Promotes your kitten with Engineer jobs, when your gold has reached **Trigger** of its capacity.
 
 ### Promote Leader
 

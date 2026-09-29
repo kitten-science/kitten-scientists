@@ -131,7 +131,7 @@ export type Kitten = {
 	varieties: Array<{ style: string }>;
 	name: string;
 	surname: string;
-	job: null;
+	job: Job;
 	trait: UnsafeTrait;
 	age: number;
 	skills: Record<string, unknown>;
@@ -320,7 +320,7 @@ export type KittenSim = {
 	unassignCraftJob: (craft: unknown) => boolean;
 	unassignCraftJobIfEngineer: (job: Job, kitten: Kitten) => void;
 	clearCraftJobs: () => void;
-	promote: (kitten: Kitten, rank: number) => number;
+	promote: (kitten: Kitten, rank?: number) => number;
 	expToPromote: (
 		rankBase: number,
 		rankFinal: number,

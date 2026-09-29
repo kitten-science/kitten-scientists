@@ -11,7 +11,8 @@ export class VillageSettings extends Setting {
 
 	holdFestivals: Setting;
 	hunt: SettingTrigger;
-	promoteKittens: SettingTrigger;
+	promoteAmbassadors: SettingTrigger;
+	promoteEngineers: SettingTrigger;
 	promoteLeader: Setting;
 	electLeader: ElectLeaderSettings;
 
@@ -19,7 +20,8 @@ export class VillageSettings extends Setting {
 		enabled = false,
 		holdFestivals = new Setting(),
 		hunt = new SettingTrigger(false, 0.98),
-		promoteKittens = new SettingTrigger(false, 1),
+		promoteAmbassadors = new SettingTrigger(false, 1),
+		promoteEngineers = new SettingTrigger(false, 1),
 		promoteLeader = new Setting(),
 		electLeader = new ElectLeaderSettings(),
 	) {
@@ -27,7 +29,8 @@ export class VillageSettings extends Setting {
 		this.jobs = this.initJobs();
 		this.holdFestivals = holdFestivals;
 		this.hunt = hunt;
-		this.promoteKittens = promoteKittens;
+		this.promoteAmbassadors = promoteAmbassadors;
+		this.promoteEngineers = promoteEngineers;
 		this.promoteLeader = promoteLeader;
 		this.electLeader = electLeader;
 	}
@@ -55,8 +58,10 @@ export class VillageSettings extends Setting {
 		this.holdFestivals.enabled =
 			settings.holdFestivals?.enabled ?? this.holdFestivals.enabled;
 		this.hunt.load(settings.hunt);
-		this.promoteKittens.enabled =
-			settings.promoteKittens?.enabled ?? this.promoteKittens.enabled;
+		this.promoteAmbassadors.enabled =
+			settings.promoteAmbassadors?.enabled ?? this.promoteAmbassadors.enabled;
+		this.promoteEngineers.enabled =
+			settings.promoteEngineers?.enabled ?? this.promoteEngineers.enabled;
 		this.promoteLeader.enabled =
 			settings.promoteLeader?.enabled ?? this.promoteLeader.enabled;
 		this.electLeader.load(settings.electLeader);

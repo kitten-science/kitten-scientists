@@ -19,7 +19,8 @@ import type { UiComponent } from "./components/UiComponent.js";
 export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
 	private readonly _hunt: SettingTriggerListItem;
 	private readonly _festivals: SettingListItem;
-	private readonly _promoteKittens: SettingTriggerListItem;
+	private readonly _promoteAmbassadors: SettingTriggerListItem;
+	private readonly _promoteEngineers: SettingTriggerListItem;
 	private readonly _promoteLeader: SettingListItem;
 	private readonly _electLeader: SettingListItem;
 
@@ -144,24 +145,24 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
 		);
 		listAddition.addChild(this._festivals);
 
-		this._promoteKittens = new SettingTriggerListItem(
+		this._promoteAmbassadors = new SettingTriggerListItem(
 			this,
-			this.setting.promoteKittens,
+			this.setting.promoteAmbassadors,
 			locale,
-			this.host.engine.i18n("option.promotekittens"),
+			this.host.engine.i18n("option.promote.ambassadors"),
 			{
 				onCheck: () => {
 					this.host.engine.imessage("status.sub.enable", [
-						this.host.engine.i18n("option.promotekittens"),
+						this.host.engine.i18n("option.promote.ambassadors"),
 					]);
 				},
 				onRefresh: () => {
-					this._promoteKittens.triggerButton.inactive =
-						!this.setting.promoteKittens.enabled;
-					this._promoteKittens.triggerButton.ineffective =
+					this._promoteAmbassadors.triggerButton.inactive =
+						!this.setting.promoteAmbassadors.enabled;
+					this._promoteAmbassadors.triggerButton.ineffective =
 						this.setting.enabled &&
-						this.setting.promoteKittens.enabled &&
-						this.setting.promoteKittens.trigger === -1;
+						this.setting.promoteAmbassadors.enabled &&
+						this.setting.promoteAmbassadors.trigger === -1;
 				},
 				onSetTrigger: async () => {
 					const value = await Dialog.prompt(
@@ -169,12 +170,12 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
 						this.host.engine.i18n("ui.trigger.promoteKittens.promptTitle"),
 						this.host.engine.i18n("ui.trigger.promoteKittens.prompt", [
 							this.host.renderPercentage(
-								this.setting.promoteKittens.trigger,
+								this.setting.promoteAmbassadors.trigger,
 								locale.selected,
 								true,
 							),
 						]),
-						this.host.renderPercentage(this.setting.promoteKittens.trigger),
+						this.host.renderPercentage(this.setting.promoteAmbassadors.trigger),
 						this.host.engine.i18n("ui.trigger.promoteKittens.promptExplainer"),
 					);
 
@@ -182,34 +183,87 @@ export class VillageSettingsUi extends SettingsPanel<VillageSettings> {
 						return;
 					}
 
-					this.setting.promoteKittens.trigger =
+					this.setting.promoteAmbassadors.trigger =
 						this.host.parsePercentage(value);
 				},
 				onUnCheck: () => {
 					this.host.engine.imessage("status.sub.disable", [
-						this.host.engine.i18n("option.promotekittens"),
+						this.host.engine.i18n("option.promote.ambassadors"),
 					]);
 				},
 			},
 		);
-		this._promoteKittens.triggerButton.element.addClass(
+		this._promoteAmbassadors.triggerButton.element.addClass(
 			stylesButton.lastHeadAction,
 		);
-		listAddition.addChild(this._promoteKittens);
+		listAddition.addChild(this._promoteAmbassadors);
+
+		this._promoteEngineers = new SettingTriggerListItem(
+			this,
+			this.setting.promoteEngineers,
+			locale,
+			this.host.engine.i18n("option.promote.engineers"),
+			{
+				onCheck: () => {
+					this.host.engine.imessage("status.sub.enable", [
+						this.host.engine.i18n("option.promote.engineers"),
+					]);
+				},
+				onRefresh: () => {
+					this._promoteEngineers.triggerButton.inactive =
+						!this.setting.promoteEngineers.enabled;
+					this._promoteEngineers.triggerButton.ineffective =
+						this.setting.enabled &&
+						this.setting.promoteEngineers.enabled &&
+						this.setting.promoteEngineers.trigger === -1;
+				},
+				onSetTrigger: async () => {
+					const value = await Dialog.prompt(
+						this,
+						this.host.engine.i18n("ui.trigger.promoteKittens.promptTitle"),
+						this.host.engine.i18n("ui.trigger.promoteKittens.prompt", [
+							this.host.renderPercentage(
+								this.setting.promoteEngineers.trigger,
+								locale.selected,
+								true,
+							),
+						]),
+						this.host.renderPercentage(this.setting.promoteEngineers.trigger),
+						this.host.engine.i18n("ui.trigger.promoteKittens.promptExplainer"),
+					);
+
+					if (value === undefined || value === "" || value.startsWith("-")) {
+						return;
+					}
+
+					this.setting.promoteEngineers.trigger =
+						this.host.parsePercentage(value);
+				},
+				onUnCheck: () => {
+					this.host.engine.imessage("status.sub.disable", [
+						this.host.engine.i18n("option.promote.engineers"),
+					]);
+				},
+			},
+		);
+		this._promoteEngineers.triggerButton.element.addClass(
+			stylesButton.lastHeadAction,
+		);
+		listAddition.addChild(this._promoteEngineers);
 
 		this._promoteLeader = new SettingListItem(
 			this,
 			this.setting.promoteLeader,
-			this.host.engine.i18n("option.promote"),
+			this.host.engine.i18n("option.promote.leader"),
 			{
 				onCheck: () => {
 					this.host.engine.imessage("status.sub.enable", [
-						this.host.engine.i18n("option.promote"),
+						this.host.engine.i18n("option.promote.leader"),
 					]);
 				},
 				onUnCheck: () => {
 					this.host.engine.imessage("status.sub.disable", [
-						this.host.engine.i18n("option.promote"),
+						this.host.engine.i18n("option.promote.leader"),
 					]);
 				},
 			},
