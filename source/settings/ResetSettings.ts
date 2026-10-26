@@ -5,7 +5,7 @@ import { ResetResourcesSettings } from "./ResetResourcesSettings.js";
 import { ResetSpaceSettings } from "./ResetSpaceSettings.js";
 import { ResetTimeSettings } from "./ResetTimeSettings.js";
 import { ResetUpgradeSettings } from "./ResetUpgradeSettings.js";
-import { Setting, SettingTrigger } from "./Settings.js";
+import { Setting, SettingTriggerMax } from "./Settings.js";
 
 export class ResetSettings extends Setting {
 	bonfire: ResetBonfireSettings;
@@ -19,8 +19,10 @@ export class ResetSettings extends Setting {
 	 * Before resetting, stop all other automations and wait until every
 	 * capped resource is filled to `trigger` (fraction of its storage).
 	 * This maximizes what Chronospheres carry over into the next run.
+	 * `max` is the longest we're willing to wait, in minutes (-1 = forever).
+	 * Resources that can't reach the target within the remaining time are skipped.
 	 */
-	stockpile: SettingTrigger;
+	stockpile: SettingTriggerMax;
 
 	constructor(
 		enabled = true,
@@ -30,7 +32,7 @@ export class ResetSettings extends Setting {
 		space = new ResetSpaceSettings(),
 		time = new ResetTimeSettings(),
 		upgrades = new ResetUpgradeSettings(),
-		stockpile = new SettingTrigger(true, 0.99),
+		stockpile = new SettingTriggerMax(true, 0.99, 10),
 	) {
 		super(enabled);
 		this.bonfire = bonfire;

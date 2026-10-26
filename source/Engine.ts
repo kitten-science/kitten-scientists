@@ -523,6 +523,10 @@ export class Engine {
 			[, duration] = await measureAsync(() =>
 				this.timeControlManager.tick(context),
 			);
+			// Builds that were queued before a stockpile phase started must not be executed anymore.
+			if (this.timeControlManager.isStockpiling) {
+				context.purchaseOrders = [];
+			}
 			// If we were put into standby, because of a reset, this duration is no good, because it includes
 			// the entire countdown to the reset.
 			if (!this._isInStandBy) {

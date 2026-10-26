@@ -26,8 +26,7 @@ export class TimeControlManager {
 	private readonly _workshopManager: WorkshopManager;
 
 	private _stockpiling = false;
-	private _stockpileBestFill = 0;
-	private _stockpileBestFillAt = 0;
+	private _stockpileStartedAt = 0;
 
 	/**
 	 * Are we currently holding all other automations to stockpile resources before a reset?
@@ -60,6 +59,10 @@ export class TimeControlManager {
 
 		if (this._stockpiling) {
 			// While stockpiling for a reset, nothing else is supposed to touch resources.
+			// Tempus Fugit only spends temporal flux and makes the stockpile fill up faster.
+			if (this.settings.accelerateTime.enabled) {
+				this.accelerateTime();
+			}
 			await this.autoReset(this._host.engine);
 			return;
 		}
@@ -277,34 +280,36 @@ export class TimeControlManager {
 
 		// Before resetting, let resources fill up, so Chronospheres carry over as much as possible.
 		if (this.settings.reset.stockpile.enabled) {
-			const target = this.settings.reset.stockpile.trigger;
-			const { fill, done } = this._checkStockpile(target);
+			const stockpile = this.settings.reset.stockpile;
 			const now = Date.now();
-
 			if (!wasStockpiling) {
-				this._stockpileBestFill = fill;
-				this._stockpileBestFillAt = now;
-				this._host.engine.imessage("reset.stockpile.start", [
-					this._host.renderPercentage(target),
-				]);
-			} else if (this._stockpileBestFill + 0.001 < fill) {
-				this._stockpileBestFill = fill;
-				this._stockpileBestFillAt = now;
+				this._stockpileStartedAt = now;
 			}
 
-			const stalled =
-				TimeControlManager.STOCKPILE_STALL_TIMEOUT <
-				now - this._stockpileBestFillAt;
+			const remaining =
+				stockpile.max < 0
+					? Number.POSITIVE_INFINITY
+					: stockpile.max * 60_000 - (now - this._stockpileStartedAt);
+			const { fill, waiting } = this._checkStockpile(
+				stockpile.trigger,
+				remaining,
+			);
 
-			if (!done && !stalled) {
+			if (!wasStockpiling && 0 < waiting) {
+				this._host.engine.imessage("reset.stockpile.start", [
+					this._host.renderPercentage(stockpile.trigger, "invariant", true),
+					stockpile.max < 0 ? "∞" : this._host.renderAbsolute(stockpile.max),
+				]);
+			}
+
+			if (0 < waiting) {
 				this._stockpiling = true;
 				return;
 			}
 
-			this._host.engine.imessage(
-				done ? "reset.stockpile.complete" : "reset.stockpile.stalled",
-				[this._host.renderPercentage(fill)],
-			);
+			this._host.engine.imessage("reset.stockpile.complete", [
+				this._host.renderPercentage(fill, "invariant", true),
+			]);
 		}
 
 		// stop!
@@ -378,38 +383,48 @@ export class TimeControlManager {
 	}
 
 	/**
-	 * If the average fill level of capped resources doesn't improve for this long,
-	 * we stop waiting and reset anyway.
-	 */
-	static readonly STOCKPILE_STALL_TIMEOUT = 60_000;
-
-	/**
-	 * Determine how full our capped resources are, relative to the stockpile target.
+	 * Determine how full our capped resources are, and how many of them are still worth waiting for.
 	 *
 	 * @param target The fraction of storage each capped resource should be filled to.
-	 * @returns The average fill level (relative to the target) and whether every resource is done.
+	 * @param remaining How many more milliseconds we're willing to wait.
+	 * @returns The average fill level (relative to the target) and the number of resources
+	 * that are expected to reach the target within the remaining time.
 	 */
-	private _checkStockpile(target: number): { fill: number; done: boolean } {
+	private _checkStockpile(
+		target: number,
+		remaining: number,
+	): { fill: number; waiting: number } {
+		const ticksPerSecond = this._host.game.getTicksPerSecondUI();
 		let total = 0;
 		let count = 0;
-		let done = true;
+		let waiting = 0;
 		for (const res of this._host.game.resPool.resources) {
 			const max = res.maxValue ?? 0;
 			if (!res.unlocked || max <= 0) {
 				continue;
 			}
 
-			const ratio = Math.min(1, (res.value ?? 0) / (max * target));
-			total += ratio;
+			const goal = max * target;
+			const value = res.value ?? 0;
+			total += Math.min(1, value / goal);
 			++count;
 
-			// Resources that aren't growing right now (or are being drained) will never get there.
-			if (ratio < 1 && 0 < this._host.game.getResourcePerTick(res.name, true)) {
-				done = false;
+			if (goal <= value) {
+				continue;
+			}
+
+			// Resources that aren't growing (or would take too long) aren't worth waiting for.
+			const perTick = this._host.game.getResourcePerTick(res.name, true);
+			if (perTick <= 0) {
+				continue;
+			}
+			const timeToGoal = ((goal - value) / perTick / ticksPerSecond) * 1000;
+			if (timeToGoal <= remaining) {
+				++waiting;
 			}
 		}
 
-		return { fill: count === 0 ? 1 : total / count, done };
+		return { fill: count === 0 ? 1 : total / count, waiting };
 	}
 
 	accelerateTime() {

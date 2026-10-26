@@ -7,9 +7,9 @@ import { Container } from "./components/Container.js";
 import { Dialog } from "./components/Dialog.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem } from "./components/SettingListItem.js";
+import { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
-import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
 import { ResetBonfireSettingsUi } from "./ResetBonfireSettingsUi.js";
 import { ResetReligionSettingsUi } from "./ResetReligionSettingsUi.js";
@@ -25,7 +25,7 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
 	private readonly _spaceUi: ResetSpaceSettingsUi;
 	private readonly _timeUi: ResetTimeSettingsUi;
 	private readonly _upgradesUi: ResetUpgradesSettingsUi;
-	private readonly _stockpileUi: SettingTriggerListItem;
+	private readonly _stockpileUi: SettingMaxTriggerListItem;
 
 	constructor(
 		parent: UiComponent,
@@ -122,18 +122,46 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
 		);
 
 		const stockpileLabel = this.host.engine.i18n("option.time.reset.stockpile");
-		this._stockpileUi = new SettingTriggerListItem(
+		const stockpile = this.setting.stockpile;
+		this._stockpileUi = new SettingMaxTriggerListItem(
 			this,
-			this.setting.stockpile,
+			stockpile,
 			locale,
 			stockpileLabel,
 			{
 				onCheck: () => {
 					this.host.engine.imessage("status.sub.enable", [stockpileLabel]);
 				},
-				onRefresh: () => {
-					this._stockpileUi.triggerButton.inactive =
-						!this.setting.stockpile.enabled;
+				onRefreshMax: () => {
+					this._stockpileUi.maxButton.updateLabel(
+						stockpile.max < 0
+							? "∞"
+							: `${this.host.renderAbsolute(stockpile.max)}m`,
+					);
+				},
+				onSetMax: async () => {
+					const value = await Dialog.prompt(
+						this,
+						this.host.engine.i18n("ui.max.reset.stockpile.prompt"),
+						this.host.engine.i18n("ui.max.reset.stockpile.promptTitle", [
+							stockpile.max < 0
+								? "∞"
+								: this.host.renderAbsolute(stockpile.max, locale.selected),
+						]),
+						this.host.renderAbsolute(stockpile.max),
+						this.host.engine.i18n("ui.max.reset.stockpile.promptExplainer"),
+					);
+
+					if (value === undefined) {
+						return;
+					}
+
+					if (value === "" || value.startsWith("-")) {
+						stockpile.max = -1;
+						return;
+					}
+
+					stockpile.max = this.host.parseAbsolute(value) ?? stockpile.max;
 				},
 				onSetTrigger: async () => {
 					const value = await Dialog.prompt(
@@ -141,12 +169,12 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
 						this.host.engine.i18n("ui.trigger.reset.stockpile.prompt"),
 						this.host.engine.i18n("ui.trigger.reset.stockpile.promptTitle", [
 							this.host.renderPercentage(
-								this.setting.stockpile.trigger,
+								stockpile.trigger,
 								locale.selected,
 								true,
 							),
 						]),
-						this.host.renderPercentage(this.setting.stockpile.trigger),
+						this.host.renderPercentage(stockpile.trigger),
 						this.host.engine.i18n("ui.trigger.reset.stockpile.promptExplainer"),
 					);
 
@@ -154,7 +182,7 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
 						return;
 					}
 
-					this.setting.stockpile.trigger = this.host.parsePercentage(value);
+					stockpile.trigger = this.host.parsePercentage(value);
 				},
 				onUnCheck: () => {
 					this.host.engine.imessage("status.sub.disable", [stockpileLabel]);
