@@ -2,11 +2,14 @@ import type { SupportedLocale } from "../Engine.js";
 import type { ResetSettings } from "../settings/ResetSettings.js";
 import type { SettingOptions } from "../settings/Settings.js";
 import type { TimeControlSettings } from "../settings/TimeControlSettings.js";
+import stylesButton from "./components/Button.module.css";
 import { Container } from "./components/Container.js";
+import { Dialog } from "./components/Dialog.js";
 import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SettingListItem } from "./components/SettingListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
+import { SettingTriggerListItem } from "./components/SettingTriggerListItem.js";
 import type { UiComponent } from "./components/UiComponent.js";
 import { ResetBonfireSettingsUi } from "./ResetBonfireSettingsUi.js";
 import { ResetReligionSettingsUi } from "./ResetReligionSettingsUi.js";
@@ -22,6 +25,7 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
 	private readonly _spaceUi: ResetSpaceSettingsUi;
 	private readonly _timeUi: ResetTimeSettingsUi;
 	private readonly _upgradesUi: ResetUpgradesSettingsUi;
+	private readonly _stockpileUi: SettingTriggerListItem;
 
 	constructor(
 		parent: UiComponent,
@@ -117,7 +121,52 @@ export class ResetSettingsUi extends SettingsPanel<ResetSettings> {
 			locale,
 		);
 
+		const stockpileLabel = this.host.engine.i18n("option.time.reset.stockpile");
+		this._stockpileUi = new SettingTriggerListItem(
+			this,
+			this.setting.stockpile,
+			locale,
+			stockpileLabel,
+			{
+				onCheck: () => {
+					this.host.engine.imessage("status.sub.enable", [stockpileLabel]);
+				},
+				onRefresh: () => {
+					this._stockpileUi.triggerButton.inactive =
+						!this.setting.stockpile.enabled;
+				},
+				onSetTrigger: async () => {
+					const value = await Dialog.prompt(
+						this,
+						this.host.engine.i18n("ui.trigger.reset.stockpile.prompt"),
+						this.host.engine.i18n("ui.trigger.reset.stockpile.promptTitle", [
+							this.host.renderPercentage(
+								this.setting.stockpile.trigger,
+								locale.selected,
+								true,
+							),
+						]),
+						this.host.renderPercentage(this.setting.stockpile.trigger),
+						this.host.engine.i18n("ui.trigger.reset.stockpile.promptExplainer"),
+					);
+
+					if (value === undefined || value === "" || value.startsWith("-")) {
+						return;
+					}
+
+					this.setting.stockpile.trigger = this.host.parsePercentage(value);
+				},
+				onUnCheck: () => {
+					this.host.engine.imessage("status.sub.disable", [stockpileLabel]);
+				},
+			},
+		);
+		this._stockpileUi.triggerButton.element.addClass(
+			stylesButton.lastHeadAction,
+		);
+
 		list.addChildren([
+			this._stockpileUi,
 			this._bonfireUi,
 			this._religionUi,
 			this._resourcesUi,

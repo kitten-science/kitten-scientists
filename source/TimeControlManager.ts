@@ -25,6 +25,17 @@ export class TimeControlManager {
 	private readonly _religionManager: ReligionManager;
 	private readonly _workshopManager: WorkshopManager;
 
+	private _stockpiling = false;
+	private _stockpileBestFill = 0;
+	private _stockpileBestFillAt = 0;
+
+	/**
+	 * Are we currently holding all other automations to stockpile resources before a reset?
+	 */
+	get isStockpiling() {
+		return this._stockpiling;
+	}
+
 	constructor(
 		host: KittenScientists,
 		_bonfireManager: BonfireManager,
@@ -40,7 +51,16 @@ export class TimeControlManager {
 	}
 
 	async tick(_context: FrameContext) {
+		if (!this.settings.enabled || !this.settings.reset.enabled) {
+			this._stockpiling = false;
+		}
 		if (!this.settings.enabled) {
+			return;
+		}
+
+		if (this._stockpiling) {
+			// While stockpiling for a reset, nothing else is supposed to touch resources.
+			await this.autoReset(this._host.engine);
 			return;
 		}
 
@@ -56,6 +76,11 @@ export class TimeControlManager {
 	}
 
 	async autoReset(engine: Engine) {
+		// Any early return below means the reset conditions are no longer met,
+		// which also ends a stockpile phase that might be in progress.
+		const wasStockpiling = this._stockpiling;
+		this._stockpiling = false;
+
 		// Don't reset if there's a challenge running.
 		if (this._host.game.challenges.currentChallenge) {
 			return;
@@ -250,6 +275,38 @@ export class TimeControlManager {
 
 		// We have now determined that we either have all items or could buy all items.
 
+		// Before resetting, let resources fill up, so Chronospheres carry over as much as possible.
+		if (this.settings.reset.stockpile.enabled) {
+			const target = this.settings.reset.stockpile.trigger;
+			const { fill, done } = this._checkStockpile(target);
+			const now = Date.now();
+
+			if (!wasStockpiling) {
+				this._stockpileBestFill = fill;
+				this._stockpileBestFillAt = now;
+				this._host.engine.imessage("reset.stockpile.start", [
+					this._host.renderPercentage(target),
+				]);
+			} else if (this._stockpileBestFill + 0.001 < fill) {
+				this._stockpileBestFill = fill;
+				this._stockpileBestFillAt = now;
+			}
+
+			const stalled =
+				TimeControlManager.STOCKPILE_STALL_TIMEOUT <
+				now - this._stockpileBestFillAt;
+
+			if (!done && !stalled) {
+				this._stockpiling = true;
+				return;
+			}
+
+			this._host.engine.imessage(
+				done ? "reset.stockpile.complete" : "reset.stockpile.stalled",
+				[this._host.renderPercentage(fill)],
+			);
+		}
+
 		// stop!
 		engine.standBy();
 
@@ -318,6 +375,41 @@ export class TimeControlManager {
 		}
 		this._host.game.resetAutomatic();
 		//=============================================================
+	}
+
+	/**
+	 * If the average fill level of capped resources doesn't improve for this long,
+	 * we stop waiting and reset anyway.
+	 */
+	static readonly STOCKPILE_STALL_TIMEOUT = 60_000;
+
+	/**
+	 * Determine how full our capped resources are, relative to the stockpile target.
+	 *
+	 * @param target The fraction of storage each capped resource should be filled to.
+	 * @returns The average fill level (relative to the target) and whether every resource is done.
+	 */
+	private _checkStockpile(target: number): { fill: number; done: boolean } {
+		let total = 0;
+		let count = 0;
+		let done = true;
+		for (const res of this._host.game.resPool.resources) {
+			const max = res.maxValue ?? 0;
+			if (!res.unlocked || max <= 0) {
+				continue;
+			}
+
+			const ratio = Math.min(1, (res.value ?? 0) / (max * target));
+			total += ratio;
+			++count;
+
+			// Resources that aren't growing right now (or are being drained) will never get there.
+			if (ratio < 1 && 0 < this._host.game.getResourcePerTick(res.name, true)) {
+				done = false;
+			}
+		}
+
+		return { fill: count === 0 ? 1 : total / count, done };
 	}
 
 	accelerateTime() {

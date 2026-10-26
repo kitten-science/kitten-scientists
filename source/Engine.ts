@@ -487,35 +487,38 @@ export class Engine {
 		// semi-intentional and should be preserved or improved.
 		let duration: number;
 		if (!this._isInStandBy) {
-			[, duration] = await measureAsync(() =>
-				this.scienceManager.tick(context),
-			);
-			context.measurements.scienceManager = duration;
+			// While stockpiling for a reset, only the time control manager is allowed to run.
+			if (!this.timeControlManager.isStockpiling) {
+				[, duration] = await measureAsync(() =>
+					this.scienceManager.tick(context),
+				);
+				context.measurements.scienceManager = duration;
 
-			[, duration] = measure(() => this.bonfireManager.tick(context));
-			context.measurements.bonfireManager = duration;
+				[, duration] = measure(() => this.bonfireManager.tick(context));
+				context.measurements.bonfireManager = duration;
 
-			[, duration] = measure(() => this.spaceManager.tick(context));
-			context.measurements.spaceManager = duration;
+				[, duration] = measure(() => this.spaceManager.tick(context));
+				context.measurements.spaceManager = duration;
 
-			[, duration] = await measureAsync(() =>
-				this.workshopManager.tick(context),
-			);
-			context.measurements.workshopManager = duration;
+				[, duration] = await measureAsync(() =>
+					this.workshopManager.tick(context),
+				);
+				context.measurements.workshopManager = duration;
 
-			[, duration] = measure(() => this.tradeManager.tick(context));
-			context.measurements.tradeManager = duration;
+				[, duration] = measure(() => this.tradeManager.tick(context));
+				context.measurements.tradeManager = duration;
 
-			[, duration] = await measureAsync(() =>
-				this.religionManager.tick(context),
-			);
-			context.measurements.religionManager = duration;
+				[, duration] = await measureAsync(() =>
+					this.religionManager.tick(context),
+				);
+				context.measurements.religionManager = duration;
 
-			[, duration] = measure(() => this.timeManager.tick(context));
-			context.measurements.timeManager = duration;
+				[, duration] = measure(() => this.timeManager.tick(context));
+				context.measurements.timeManager = duration;
 
-			[, duration] = measure(() => this.villageManager.tick(context));
-			context.measurements.villageManager = duration;
+				[, duration] = measure(() => this.villageManager.tick(context));
+				context.measurements.villageManager = duration;
+			}
 
 			[, duration] = await measureAsync(() =>
 				this.timeControlManager.tick(context),
