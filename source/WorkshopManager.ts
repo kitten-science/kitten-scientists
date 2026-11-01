@@ -285,10 +285,10 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 					Math.min(
 						// We take the possible crafts as the baseline
 						craftsPossible -
-							// If the source material is one that has a storage capacity, and the storage is full,
-							// then we want to allow all possible crafts to be crafted. So we subtract 0.
-							(0 < materialResource.maxValue &&
-							this.isResourceCapped(materialResource.name)
+							// If the source material is one that has a storage capacity or craft limit,
+							// and the storage is full, then we want to allow all possible crafts to be crafted.
+							// So we subtract 0.
+							(this.isResourceCapped(materialResource.name, craft)
 								? 0
 								: // If the resource is not capped, we subtract the crafts we have already done.
 									craftsDone),
@@ -803,12 +803,13 @@ export class WorkshopManager extends UpgradeManager implements Automation {
 		}
 	}
 
-	isResourceCapped(resource: Resource): boolean {
+	isResourceCapped(resource: Resource, craft: CraftSettingsItem): boolean {
 		const resourceMeta = this.getResource(resource);
 
 		if (resourceMeta.maxValue === 0) {
-			// Resource has no capacity. It can never be capped.
-			return false;
+			// Resources without a capacity defined by the game, will be treated
+			// as capped, when their configured crafting limit has been reached.
+			return negativeOneToInfinity(craft.max) <= resourceMeta.value;
 		}
 
 		if (resourceMeta.maxValue <= resourceMeta.value) {
