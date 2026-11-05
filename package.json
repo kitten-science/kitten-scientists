@@ -20,7 +20,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.6.4",
-		"@oliversalzburg/js-utils": "0.10.0",
+		"@oliversalzburg/js-utils": "0.11.0",
 		"@types/dojo": "1.9.49",
 		"@types/jquery": "4.0.1",
 		"@types/node": "26.6.5",
