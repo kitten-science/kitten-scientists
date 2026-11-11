@@ -547,7 +547,9 @@ export class TimeControlManager {
 			const controller = new classes.ui.time.ShatterTCBtnController(
 				this._host.game,
 			) as ShatterTCBtnController;
-			const model = controller.fetchModel({});
+			const model = controller.fetchModel({
+				prices: [{ name: "timeCrystal", val: 1 }],
+			});
 			controller.doShatterAmt(model, willSkip);
 			this._host.engine.iactivity("time.skip", "act.time.skip", [willSkip]);
 			this._host.engine.storeForSummary("time.skip", willSkip);
