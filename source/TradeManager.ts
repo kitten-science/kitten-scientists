@@ -828,7 +828,7 @@ export class TradeManager implements Automation {
 
 			const capacity = Math.max((resource.maxValue - resource.value) / max, 0);
 
-			highestCapacity = capacity < highestCapacity ? highestCapacity : capacity;
+			highestCapacity = Math.max(capacity, highestCapacity);
 		}
 
 		// We must take the ceiling of capacity so that we will trade as long

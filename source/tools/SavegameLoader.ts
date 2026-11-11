@@ -22,7 +22,7 @@ export class SavegameLoader {
 				return;
 			}
 
-			this._game.saveImportDropboxText(data, (error) => {
+			this._game.saveImportText(data, (error) => {
 				if (error) {
 					reject(error);
 					return;
