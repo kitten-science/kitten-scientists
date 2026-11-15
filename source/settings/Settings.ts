@@ -110,6 +110,42 @@ export class SettingMax extends Setting {
 	}
 }
 
+export class SettingMin extends Setting {
+	min: number;
+
+	constructor(enabled = false, min = 0) {
+		super(enabled);
+		this.min = min;
+	}
+
+	load(setting: Maybe<Partial<SettingMin>>) {
+		if (isNil(setting)) {
+			return;
+		}
+
+		super.load(setting);
+		this.min = setting.min ?? this.min;
+	}
+}
+
+export class SettingMaxMin extends SettingMax {
+	min: number;
+
+	constructor(enabled = false, max = -1, min = -1) {
+		super(enabled, max);
+		this.min = min;
+	}
+
+	load(setting: Maybe<Partial<SettingMaxMin>>) {
+		if (isNil(setting)) {
+			return;
+		}
+
+		super.load(setting);
+		this.min = setting.min ?? this.min;
+	}
+}
+
 export class SettingLimitedMax extends SettingLimited implements SettingMax {
 	max: number;
 
@@ -188,24 +224,45 @@ export class SettingTriggerMax extends SettingTrigger implements SettingMax {
 	}
 }
 
-export class SettingThresholdMax
-	extends SettingThreshold
-	implements SettingMax
-{
-	max: number;
+export class SettingTriggerMaxMin extends SettingTriggerMax {
+	min: number;
 
-	constructor(enabled = false, trigger = 1, max = 0) {
-		super(enabled, trigger);
-		this.max = max;
+	constructor(enabled = false, trigger = -1, max = -1, min = -1) {
+		super(enabled, trigger, max);
+		this.min = min;
 	}
 
-	load(setting: Maybe<Partial<SettingTriggerMax>>) {
+	load(setting: Maybe<Partial<SettingTriggerMaxMin>>) {
+		if (isNil(setting)) {
+			return;
+		}
+
+		super.load(setting);
+		this.min = setting.min ?? this.min;
+	}
+}
+
+export class SettingThresholdMaxMin
+	extends SettingThreshold
+	implements SettingMaxMin
+{
+	max: number;
+	min: number;
+
+	constructor(enabled = false, trigger = 1, max = -1, min = -1) {
+		super(enabled, trigger);
+		this.max = max;
+		this.min = min;
+	}
+
+	load(setting: Maybe<Partial<SettingTriggerMaxMin>>) {
 		if (isNil(setting)) {
 			return;
 		}
 
 		super.load(setting);
 		this.max = setting.max ?? this.max;
+		this.min = setting.min ?? this.min;
 	}
 }
 

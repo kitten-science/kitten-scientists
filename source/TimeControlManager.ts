@@ -507,6 +507,10 @@ export class TimeControlManager {
 			),
 		);
 
+		if (canSkip < this.settings.timeSkip.min) {
+			return;
+		}
+
 		// The amount of skips to perform.
 		let willSkip = 0;
 

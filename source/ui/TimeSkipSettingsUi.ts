@@ -14,7 +14,7 @@ import stylesLabelListItem from "./components/LabelListItem.module.css";
 import { SeasonsList } from "./components/SeasonsList.js";
 import { SettingListItem } from "./components/SettingListItem.js";
 import stylesSettingListItem from "./components/SettingListItem.module.css";
-import { SettingMaxTriggerListItem } from "./components/SettingMaxTriggerListItem.js";
+import { SettingMaxMinTriggerListItem } from "./components/SettingMaxMinTriggerListItem.js";
 import { SettingsList } from "./components/SettingsList.js";
 import { SettingsPanel } from "./components/SettingsPanel.js";
 import type { UiComponent } from "./components/UiComponent.js";
@@ -22,7 +22,7 @@ import { TimeSkipHeatSettingsUi } from "./TimeSkipHeatSettingsUi.js";
 
 export class TimeSkipSettingsUi extends SettingsPanel<
 	TimeSkipSettings,
-	SettingMaxTriggerListItem
+	SettingMaxMinTriggerListItem
 > {
 	private readonly _cycles: CollapsiblePanel;
 	private readonly _seasons: CollapsiblePanel;
@@ -38,7 +38,7 @@ export class TimeSkipSettingsUi extends SettingsPanel<
 		super(
 			parent,
 			settings,
-			new SettingMaxTriggerListItem(parent, settings, locale, label, {
+			new SettingMaxMinTriggerListItem(parent, settings, locale, label, {
 				onCheck: (_isBatchProcess?: boolean) => {
 					parent.host.engine.imessage("status.auto.enable", [label]);
 				},
@@ -53,6 +53,20 @@ export class TimeSkipSettingsUi extends SettingsPanel<
 								? parent.host.engine.i18n("ui.max.timeSkip.titleZero", [label])
 								: parent.host.engine.i18n("ui.max.timeSkip.title", [
 										parent.host.renderAbsolute(settings.max),
+										label,
+									]);
+				},
+				onRefreshMin() {
+					this.minButton.updateLabel(parent.host.renderAbsolute(settings.min));
+					this.minButton.element[0].title =
+						settings.min < 0
+							? parent.host.engine.i18n("ui.min.timeSkip.titleInfinite", [
+									label,
+								])
+							: settings.min === 0
+								? parent.host.engine.i18n("ui.min.timeSkip.titleZero", [label])
+								: parent.host.engine.i18n("ui.min.timeSkip.title", [
+										parent.host.renderAbsolute(settings.min),
 										label,
 									]);
 				},
@@ -92,6 +106,32 @@ export class TimeSkipSettingsUi extends SettingsPanel<
 
 					settings.max = parent.host.parseAbsolute(value) ?? settings.max;
 				},
+				onSetMin: async () => {
+					const value = await Dialog.prompt(
+						parent,
+						parent.host.engine.i18n("ui.min.timeSkip.prompt"),
+						parent.host.engine.i18n("ui.min.timeSkip.promptTitle", [
+							parent.host.renderAbsolute(settings.min, locale.selected),
+						]),
+						parent.host.renderAbsolute(settings.min),
+						parent.host.engine.i18n("ui.min.timeSkip.promptExplainer"),
+					);
+
+					if (value === undefined) {
+						return;
+					}
+
+					if (value === "" || value.startsWith("-")) {
+						settings.min = -1;
+						return;
+					}
+
+					if (value === "0") {
+						settings.enabled = false;
+					}
+
+					settings.min = parent.host.parseAbsolute(value) ?? settings.min;
+				},
 				onSetTrigger: async () => {
 					const value = await Dialog.prompt(
 						parent,
@@ -119,6 +159,8 @@ export class TimeSkipSettingsUi extends SettingsPanel<
 				onRefreshRequest: () => {
 					this.settingItem.maxButton.inactive =
 						!settings.enabled || settings.max === -1;
+					this.settingItem.minButton.inactive =
+						!settings.enabled || settings.min === -1;
 					this.settingItem.triggerButton.inactive =
 						!settings.enabled || settings.trigger === -1;
 
