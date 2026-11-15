@@ -975,6 +975,7 @@ export type Stat = (typeof Stats)[number];
 
 export const ChronoForgeUpgrades = [
 	"blastFurnace",
+	"controlledDelay",
 	"ressourceRetrieval",
 	"temporalAccelerator",
 	"temporalBattery",
